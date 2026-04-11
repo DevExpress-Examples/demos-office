@@ -1,0 +1,45 @@
+@page "/Presentation/MergeSplit/Split"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.MergeSplit
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Split Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@splitModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PresentationSample" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Extraction Mode" ColSpanMd="4">
+            <DxComboBox Data="@splitModel.ExtractModes" @bind-Value="splitModel.ExtractMode"
+                        TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Split Range" ColSpanMd="4">
+            <DxTextBox @bind-Text="splitModel.SlideRange" NullText="1-3, 5, 7-10" />
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Extract and Save as "
+                                Data="@splitModel.OutputFormats"
+                                @bind-Value="splitModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    PresentationSplitModel splitModel = new PresentationSplitModel();
+
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, splitModel.OutputFormat, splitModel.OutputName);
+
+        content.Add(new StringContent(splitModel.SlideRange.ToString()), "SlideRange");
+        content.Add(new StringContent(splitModel.ExtractMode.ToString()), "ExtractMode");
+
+        var apiUrl = "api/presentation/split/process";
+        await ExecuteDownloadOperation(apiUrl, content, splitModel.OutputName, splitModel.OutputFormat.ToString());
+    }
+}

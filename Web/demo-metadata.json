@@ -1,0 +1,717 @@
+{
+  "TitleFormat": "Blazor Office File API: {0} | DevExpress",
+  "AssemblyName": "BlazorDemo.OfficeFileApi.Server",
+  "Products": [
+    {
+      "Title": "Office File API",
+      "PageUri": "",
+      "IconName": "",
+      "Description": ""
+    }
+  ],
+  "Groups": [
+    {
+      "Title": "Word Processing",
+      "Id": "WordProcessing",
+      "Pages": [
+        {
+          "Id": "Overview",
+          "Url": "WordProcessing",
+          "Title": "Overview",
+          "Keywords": "",
+          "Description": "",
+          "DocUrl": "403143"
+        },
+        {
+          "Id": "DocumentConversion",
+          "Title": "Document Conversion",
+          "Pages": [
+            {
+              "Id": "WordToPdf",
+              "Url": "WordProcessing/DocumentConversion/WordToPdf",
+              "Title": "Convert to PDF",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, pdf-conversion, word-to-pdf, tagged-pdf, accessible-pdf, archive-pdf, pdfa-export, pdfua-export, pdf-a-conformance, pdf-compliance, accessibility, export-settings, document-conversion",
+              "Description": "Convert Word documents to PDF format with PDF/A and PDF/UA support",
+              "DocUrl": "118873/word-processing-document-api/export-to-pdf",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "WordToPdfController.cs",
+                  "Path": "Controllers\\WordProcessing\\DocumentConversion\\WordToPdfController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "WordToWord",
+              "Url": "WordProcessing/DocumentConversion/WordToWord",
+              "Title": "Convert to Other Word Formats",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, word-format-conversion, embed-fonts, word-to-docx, word-to-doc, word-to-rtf, word-to-txt, word-to-html, docx, doc, rtf, txt, html, format-compatibility, document-conversion, html-conversion",
+              "Description": "",
+              "DocUrl": "15441/word-processing-document-api/import-and-export",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "WordToWordController.cs",
+                  "Path": "Controllers\\WordProcessing\\DocumentConversion\\WordToWordController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "WordToImage",
+              "Url": "WordProcessing/DocumentConversion/WordToImage",
+              "Title": "Convert to Image",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, image-export, document-to-image, word-to-image, docx-to-image, page-to-image, page-export, image-format, image-conversion, png-export, jpeg-export, svg-export, bmp-export, export-settings, cross-platform",
+              "Description": "",
+              "DocUrl": "404872/word-processing-document-api/examples/export/how-to-export-a-document-to-a-series-of-images",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "WordToImageController.cs",
+                  "Path": "Controllers\\WordProcessing\\DocumentConversion\\WordToImageController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": "DocumentProtection",
+          "Title": "Document Protection",
+          "Pages": [
+            {
+              "Id": "EncryptWithPassword",
+              "Url": "WordProcessing/DocumentProtection/EncryptWithPassword",
+              "Title": "Encrypt with Password",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, encryption, word-encryption, docx-encryption, password-protection, password-encrypt, document-security, encryption-type, secure-document, secure-docx",
+              "Description": "",
+              "DocUrl": "120152/word-processing-document-api/document-security/document-protection#open-and-save-password-encrypted-files",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "WordEncryptPasswordController.cs",
+                  "Path": "Controllers\\WordProcessing\\DocumentProtection\\WordEncryptPasswordController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "DigitalSignature",
+              "Url": "WordProcessing/DocumentProtection/DigitalSignature",
+              "Title": "Sign Documents",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, document-security, secure-document, digital-signature, word-digital-signature, docx-signing, document-signing, certificate, x509-certificate, tsa-server, hash-algorithm, sha256, sha512, authentication",
+              "Description": "",
+              "DocUrl": "405732/word-processing-document-api/document-security/sign-word-files",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "WordDigitalSignatureController.cs",
+                  "Path": "Controllers\\WordProcessing\\DocumentProtection\\WordDigitalSignatureController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "ProtectWithPassword",
+              "Url": "WordProcessing/DocumentProtection/ProtectWithPassword",
+              "Title": "Protect with Password",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, document-protection, docx-protection, password-protection, restrict-editing, read-only-document, form-protection, document-permissions, range-permissions, document-restrictions, editing-restrictions, revisions, comments",
+              "Description": "",
+              "DocUrl": "120152/word-processing-document-api/document-security/document-protection#restrict-document-modification",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "WordProtectPasswordController.cs",
+                  "Path": "Controllers\\WordProcessing\\DocumentProtection\\WordProtectPasswordController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": "MergeSplit",
+          "Title": "Merge and Split Documents",
+          "Pages": [
+            {
+              "Id": "Merge",
+              "Url": "WordProcessing/MergeSplit/Merge",
+              "Title": "Merge Documents",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, document-merging, merge-document, combine-documents, append-document, docx-merge, merge-settings",
+              "Description": "",
+              "DocUrl": "119802/word-processing-document-api/merge-and-split-documents/merge-documents",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "MergeController.cs",
+                  "Path": "Controllers\\WordProcessing\\MergeSplit\\MergeController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "Split",
+              "Url": "WordProcessing/MergeSplit/Split",
+              "Title": "Split Documents",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, document-splitting, split-document, docx-splitting, split-by-page, split-by-section, page-extraction, content-extraction, section-extraction, split-settings",
+              "Description": "",
+              "DocUrl": "120385/word-processing-document-api/merge-and-split-documents/split-documents",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "SplitController.cs",
+                  "Path": "Controllers\\WordProcessing\\MergeSplit\\SplitController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": "MailMergeFields",
+          "Title": "Mail Merge / Document Fields",
+          "Pages": [
+            {
+              "Id": "MailMerge",
+              "Url": "WordProcessing/MailMergeFields/MailMerge",
+              "Title": "Mail Merge - Letter",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, mail-merge, mail-merge-letter, document-generation, template-based-generation, merge-fields, replace-placeholders, data-source-binding, generate-letter, mail-merge-from-data-source",
+              "Description": "",
+              "DocUrl": "15277/word-processing-document-api/mail-merge",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "WordMailMergeController.cs",
+                  "Path": "Controllers\\WordProcessing\\MailMergeFields\\WordMailMergeController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "MasterDetailMailMerge",
+              "Url": "WordProcessing/MailMergeFields/MasterDetailMailMerge",
+              "Title": "Detail Mail Merge - Order Report",
+              "Keywords": "devexpress, office-file-api, word-processing, rtf-processing, blazor, mail-merge, mail-merge-report, master-detail-mail-merge, master-detail-data, document-generation, template-based-generation, merge-fields, data-source-binding, generate-report, mail-merge-from-data-source",
+              "Description": "",
+              "DocUrl": "15277/word-processing-document-api/mail-merge",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "WordMailMergeRegionsController.cs",
+                  "Path": "Controllers\\WordProcessing\\MailMergeFields\\WordMailMergeRegionsController.cs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Title": "Spreadsheet Document API",
+      "Id": "SpreadsheetProcessing",
+      "Pages": [
+        {
+          "Id": "Overview",
+          "Url": "SpreadsheetProcessing",
+          "Title": "Overview",
+          "Keywords": "",
+          "Description": "",
+          "DocUrl": "403143"
+        },
+        {
+          "Category": "SpreadsheetProcessing",
+          "Id": "DocumentConversion",
+          "Title": "Document Conversion",
+          "Pages": [
+            {
+              "Id": "ExcelToPdf",
+              "Url": "SpreadsheetProcessing/DocumentConversion/ExcelToPdf",
+              "Title": "Convert to PDF",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-processing, spreadsheet-api, excel-spreadsheet, pdf-conversion, pdf-export, excel-to-pdf, spreadsheet-to-pdf, workbook-to-pdf, xlsx-to-pdf, xls-to-pdf, tagged-pdf, accessible-pdf, pdfa-export, pdfua-export, pdf-a-conformance, pdf-compliance, accessibility",
+              "Description": "",
+              "DocUrl": "13780/spreadsheet-document-api/examples/workbooks/how-to-export-a-workbook-to-pdf",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelToPdfController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\DocumentConversion\\ExcelToPdfController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "ExcelToExcel",
+              "Url": "SpreadsheetProcessing/DocumentConversion/ExcelToExcel",
+              "Title": "Convert to Other Excel Format",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-processing, spreadsheet-api, excel-spreadsheet, excel-conversion, convert-workbook, excel-format-conversion, convert-to-xlsx, convert-to-xls, convert-to-xlsb, convert-to-xltx, convert-to-csv, workbook-conversion, format-compatibility",
+              "Description": "",
+              "DocUrl": "405569/spreadsheet-document-api/import-and-export",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelToExcelController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\DocumentConversion\\ExcelToExcelController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "ExcelToHtml",
+              "Url": "SpreadsheetProcessing/DocumentConversion/ExcelToHtml",
+              "Title": "Convert to HTML",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-processing, spreadsheet-api, excel-spreadsheet, convert-to-html, workbook-to-html, worksheet-to-html, html-export, html-conversion, excel-to-html, worksheet-export, export-images, web-format",
+              "Description": "Convert Spreadsheet documents to HTML format using a model-based approach",
+              "DocUrl": "113724/spreadsheet-document-api/examples/workbooks/how-to-export-a-document-to-html",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelToHtmlController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\DocumentConversion\\ExcelToHtmlController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "ExcelToImage",
+              "Url": "SpreadsheetProcessing/DocumentConversion/ExcelToImage",
+              "Title": "Convert to Image",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-processing, spreadsheet-api, excel-spreadsheet, convert-to-image, workbook-to-image, image-export, worksheet-to-image, excel-to-image, image-format, export-settings, xlsx-to-image, worksheet-export, image-conversion, png-export, jpeg-export, svg-export, bmp-export, cross-platform",
+              "Description": "Convert Spreadsheet document to different image formats using a model-based approach",
+              "DocUrl": "403109/spreadsheet-document-api/examples/cells/how-to-save-a-cell-range-as-an-image",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelToImageController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\DocumentConversion\\ExcelToImageController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Category": "SpreadsheetProcessing",
+          "Id": "DocumentProtection",
+          "Title": "Document Protection",
+          "Pages": [
+            {
+              "Id": "EncryptWithPassword",
+              "Url": "SpreadsheetProcessing/DocumentProtection/EncryptWithPassword",
+              "Title": "Encrypt with Password",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-api, excel-spreadsheet, encryption, password-protection, document-security, excel-security, encryption-type, secure-workbook, secure-excel, encrypt-excel, encrypt-xlsx",
+              "Description": "",
+              "DocUrl": "405735/spreadsheet-document-api/document-security/document-protection#file-encryption",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelEncryptPasswordController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\DocumentProtection\\ExcelEncryptPasswordController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "DigitalSignature",
+              "Url": "SpreadsheetProcessing/DocumentProtection/DigitalSignature",
+              "Title": "Sign Documents",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-api, excel-spreadsheet, digital-signature, document-signing, certificate, hash-algorithm, tsa-server, authentication, document-security, excel-security, secure-workbook, excel-digital-signature, xlsx-signing, x509-certificate, sha256, sha512",
+              "Description": "",
+              "DocUrl": "405733/spreadsheet-document-api/document-security/sign-excel-files",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelDigitalSignatureController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\DocumentProtection\\ExcelDigitalSignatureController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "ProtectWorkbook",
+              "Url": "SpreadsheetProcessing/DocumentProtection/ProtectWorkbook",
+              "Title": "Protect a Workbook with Password",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-api, excel-spreadsheet, workbook-protection, excel-protection, xlsx-protection, password-protection, document-restrictions, workbook-security, lock-structure",
+              "Description": "",
+              "DocUrl": "405735/spreadsheet-document-api/document-security/document-protection#workbook-protection",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelProtectWorkbookController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\DocumentProtection\\ExcelProtectWorkbookController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "ProtectWorksheet",
+              "Url": "SpreadsheetProcessing/DocumentProtection/ProtectWorksheet",
+              "Title": "Protect a Worksheet with Password",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-api, excel-spreadsheet, worksheet-protection, worksheet-permissions, secure-worksheet, editing-permissions, restrict-editing, password-protection, permitted-actions, sheet-security, form-modifications",
+              "Description": "",
+              "DocUrl": "405735/spreadsheet-document-api/document-security/document-protection#worksheet-protection",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelProtectProtectWorksheet.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\DocumentProtection\\ExcelProtectWorksheetController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Category": "SpreadsheetProcessing",
+          "Id": "MergeSplitDocuments",
+          "Title": "Merge and Split Documents",
+          "Pages": [
+            {
+              "Id": "MergeWorkbooks",
+              "Url": "SpreadsheetProcessing/MergeSplitDocuments/MergeWorkbooks",
+              "Title": "Merge Workbooks",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-api, excel-spreadsheet, merge-workbooks, combine-workbooks, merge-xlsx, combine-xlsx, merge-excel, append-workbook, append-worksheet, append-excel, append-xlsx, combine-excel-files, workbook-consolidation, multiple-files",
+              "Description": "",
+              "DocUrl": "120383/spreadsheet-document-api/examples/workbooks/how-to-merge-multiple-workbooks-into-one-document",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelMergeWorkbooksController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\MergeSplitDocuments\\ExcelMergeWorkbooksController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "SplitWorkbooks",
+              "Url": "SpreadsheetProcessing/MergeSplitDocuments/SplitWorkbooks",
+              "Title": "Split Workbooks",
+              "Keywords": "devexpress, office-file-api, blazor, spreadsheet-api, excel-spreadsheet, split-workbook, split-excel, split-xlsx, extract-worksheet, separate-worksheets, workbook-division, export-worksheets, multiple-files",
+              "Description": "",
+              "DocUrl": "12082/spreadsheet-document-api/examples/worksheets/how-to-copy-worksheets",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "ExcelSplitWorkbooksController.cs",
+                  "Path": "Controllers\\SpreadsheetProcessing\\MergeSplitDocuments\\ExcelSplitWorkbooksController.cs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Title": "PDF Document API",
+      "Id": "PdfProcessing",
+      "Pages": [
+        {
+          "Id": "Overview",
+          "Url": "PdfProcessing",
+          "Title": "Overview",
+          "Keywords": "",
+          "Description": "",
+          "DocUrl": "403143"
+        },
+        {
+          "Category": "PdfProcessing",
+          "Id": "DocumentConversion",
+          "Title": "Document Conversion",
+          "Pages": [
+            {
+              "Id": "PdfToCompatible",
+              "Url": "PdfProcessing/DocumentConversion/PdfToCompatible",
+              "Title": "Convert to PDF/A",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, archive-pdf, pdfa-conversion, convert-to-pdfa, pdf-to-pdfa, accessible-pdfa, pdf-a-conformance, pdfa-1b, pdfa-2b, pdfa-3b, pdf-document",
+              "Description": "",
+              "DocUrl": "404727/pdf-document-api/document-manipulation/convert-documents",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfToCompatibleController.cs",
+                  "Path": "Controllers\\PdfProcessing\\DocumentConversion\\PdfToCompatibleController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "PdfToImage",
+              "Url": "PdfProcessing/DocumentConversion/PdfToImage",
+              "Title": "Convert to Image",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, pdf-to-image, export-pdf-pages-as-images, bmp-export, png-export, jpeg-export, tiff-export, svg-export, image-export, page-to-image, page-preview, pdf-to-bmp, pdf-to-png, pdf-to-jpeg, pdf-to-tiff, pdf-to-svg, image-options, cross-platform",
+              "Description": "",
+              "DocUrl": "120708/pdf-document-api/examples/export-a-pdf-document-to-an-image",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfToImageController.cs",
+                  "Path": "Controllers\\PdfProcessing\\DocumentConversion\\PdfToImageController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Category": "PdfProcessing",
+          "Id": "DocumentProtection",
+          "Title": "Document Protection",
+          "Pages": [
+            {
+              "Id": "PdfApplyWatermark",
+              "Url": "PdfProcessing/DocumentProtection/PdfApplyWatermark",
+              "Title": "Apply Watermark",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, watermark, pdf-watermark, pdf-document, text-watermark, image-watermark, watermark-settings",
+              "Description": "",
+              "DocUrl": "114824/pdf-document-api/examples/pdf-graphics-and-additional-content/how-to-generate-a-document-layout-from-scratch",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfApplyWatermarkController.cs",
+                  "Path": "Controllers\\PdfProcessing\\DocumentProtection\\PdfApplyWatermarkController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "PdfDigitalSignature",
+              "Url": "PdfProcessing/DocumentProtection/PdfDigitalSignature",
+              "Title": "Sign Documents",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, digital-signature, pdf-signing, pdf-signature, sign-pdf, certificate, hash-algorithm, tsa-server, authentication, x509-certificate, pkcs7, signature-appearance, signature-settings, pdf-protection",
+              "Description": "",
+              "DocUrl": "114623/pdf-document-api/document-security/sign-documents",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfDigitalSignatureController.cs",
+                  "Path": "Controllers\\PdfProcessing\\DocumentProtection\\PdfDigitalSignatureController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "PdfEncryptPassword",
+              "Url": "PdfProcessing/DocumentProtection/PdfEncryptPassword",
+              "Title": "Encrypt with Password",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, encryption, pdf-encryption, password-protection, pdf-permissions, document-permissions, document-security, encryption-type, secure-pdf, protect-pdf, restrict-modification, document-restrictions, pdf-authentication",
+              "Description": "",
+              "DocUrl": "114517/pdf-document-api/document-security/document-protection",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfEncryptPasswordController.cs",
+                  "Path": "Controllers\\PdfProcessing\\DocumentProtection\\PdfEncryptPasswordController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "PdfRedaction",
+              "Url": "PdfProcessing/DocumentProtection/PdfRedaction",
+              "Title": "Redact PDF Content",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, redact-pdf, redaction, apply-redaction, permanent-redaction, remove-personal-data, remove-sensitive-data, sensitive-information, gdpr-compliance, content-removal",
+              "Description": "",
+              "DocUrl": "405392/pdf-document-api/annotations/redact-annotations",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfRedactionController.cs",
+                  "Path": "Controllers\\PdfProcessing\\DocumentProtection\\PdfRedactionController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "PdfValidateSignature",
+              "Url": "PdfProcessing/DocumentProtection/PdfValidateSignature",
+              "Title": "Validate Signatures",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, signature-validation, validate-pdf-signature, signature-verification, digital-signature, certificate-validation, signature-status, validate-pkcs7, long-term-validation, ltv-signature, ocsp-revocation, ocsp-validation, crl-validation, timestamp-validation",
+              "Description": "",
+              "DocUrl": "404728/pdf-document-api/examples/document-protection/how-to-validate-a-pdf-document-signature",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfValidateSignatureController.cs",
+                  "Path": "Controllers\\PdfProcessing\\DocumentProtection\\PdfValidateSignatureController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Category": "PdfProcessing",
+          "Id": "MergeSplit",
+          "Title": "Merge and Split Documents",
+          "Pages": [
+            {
+              "Id": "PdfMergeDocuments",
+              "Url": "PdfProcessing/MergeSplit/PdfMergeDocuments",
+              "Title": "Merge Documents",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, merge-pdf, combine-pdf-documents, pdf-merging, append-pdf",
+              "Description": "",
+              "DocUrl": "119760/pdf-document-api/document-manipulation/merging-documents",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfMergeDocumentsController.cs",
+                  "Path": "Controllers\\PdfProcessing\\MergeSplit\\PdfMergeDocumentsController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "PdfSplitDocuments",
+              "Url": "PdfProcessing/MergeSplit/PdfSplitDocuments",
+              "Title": "Split Documents",
+              "Keywords": "devexpress, office-file-api, blazor, pdf-processing, pdf-api, split-pdf, separate-pdf-pages, pdf-division, extract-page",
+              "Description": "",
+              "DocUrl": "119762/pdf-document-api/document-manipulation/page-manipulation#extract-a-page",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PdfSplitDocumentsController.cs",
+                  "Path": "Controllers\\PdfProcessing\\MergeSplit\\PdfSplitDocumentsController.cs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Title": "Presentation API",
+      "Id": "Presentation",
+      "Pages": [
+        {
+          "Id": "Overview",
+          "Url": "Presentation",
+          "Title": "Overview",
+          "Keywords": "",
+          "Description": "",
+          "DocUrl": "403143"
+        },
+        {
+          "Category": "Presentation",
+          "Id": "DocumentConversion",
+          "Title": "Document Conversion",
+          "Pages": [
+            {
+              "Id": "PresentationToPdf",
+              "Url": "Presentation/DocumentConversion/PresentationToPdf",
+              "Title": "Convert to PDF",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, pdf-conversion, presentation-to-pdf, powerpoint-to-pdf, export-to-pdf, pptx-to-pdf",
+              "Description": "",
+              "DocUrl": "405409/presentation-api/export-presentation",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationToPdfController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\DocumentConversion\\PresentationToPdfController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "PresentationToPresentation",
+              "Url": "Presentation/DocumentConversion/PresentationToPresentation",
+              "Title": "Convert to Other Presentation Format",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, presentation-format-conversion, convert-powerpoint, convert-to-pptx, convert-to-potx, pptx, pptm, potx, potm, format-compatibility",
+              "Description": "",
+              "DocUrl": "405410/presentation-api/create-load-presentations#save-the-presentation",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationToPresentationController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\DocumentConversion\\PresentationToPresentationController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Category": "Presentation",
+          "Id": "MergeSplit",
+          "Title": "Merge and Split Presentations",
+          "Pages": [
+            {
+              "Id": "Merge",
+              "Url": "Presentation/MergeSplit/Merge",
+              "Title": "Merge Presentations",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, merge-presentations, merge-powerpoint, merge-pptx, combine-presentations, combine-powerpoint, combine-pptx, presentation-merging, multiple-files",
+              "Description": "",
+              "DocUrl": "405406/presentation-api/merge-split",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationMergeController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\MergeSplit\\PresentationMergeController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "Split",
+              "Url": "Presentation/MergeSplit/Split",
+              "Title": "Split Presentations",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, split-presentations, split-powerpoint, split-pptx, extract-slide, separate-slides, presentation-division",
+              "Description": "",
+              "DocUrl": "405406/presentation-api/merge-split",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationSplitController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\MergeSplit\\PresentationSplitController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Category": "Presentation",
+          "Id": "SearchExtract",
+          "Title": "Search and Extract Content",
+          "Pages": [
+            {
+              "Id": "FindReplace",
+              "Url": "Presentation/SearchExtract/FindReplace",
+              "Title": "Find and Replace Text",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, find-replace, replace-text-pptx, text-search, text-replacement, highlight-text, remove-text",
+              "Description": "",
+              "DocUrl": "405628/presentation-api/search-replace-remove-text",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationFindReplaceController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\SearchExtract\\PresentationFindReplaceController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "Metadata",
+              "Url": "Presentation/SearchExtract/Metadata",
+              "Title": "Extract Metadata",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, extract-metadata, presentation-properties, document-properties, extract-pptx-metadata, read-pptx-properties, read-custom-properties, get-presentation-properties, read-presentation-metadata",
+              "Description": "",
+              "DocUrl": "405429/presentation-api/obtain-change-document-properties",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationMetadataController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\SearchExtract\\PresentationMetadataController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "ExtractText",
+              "Url": "Presentation/SearchExtract/ExtractText",
+              "Title": "Extract Text from Slides",
+              "Keywords": " devexpress, presentation-api, powerpoint-presentation, blazor, text-extraction, extract-slide-text, slide-content, read-slide-text, get-slide-text, extract-pptx-text, get-presentation-text, read-speaker-notes",
+              "Description": "",
+              "DocUrl": "405430/presentation-api/extract-presentation-content#extract-slide-text",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationExtractTextController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\SearchExtract\\PresentationExtractTextController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "ExtractImages",
+              "Url": "Presentation/SearchExtract/ExtractImages",
+              "Title": "Extract Images",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, image-extraction, extract-images, slide-images, export-images, cross-platform",
+              "Description": "",
+              "DocUrl": "405430/presentation-api/extract-presentation-content#extract-pictures",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationExtractImagesController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\SearchExtract\\PresentationExtractImagesController.cs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Category": "Presentation",
+          "Id": "DocumentElements",
+          "Title": "Organize Slide Elements",
+          "Pages": [
+            {
+              "Id": "Tables",
+              "Url": "Presentation/DocumentElements/Tables",
+              "Title": "Generate Tables",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, generate-tables, create-slide-table, generate-slide-table, add-table-to-slide, create-pptx-table, generate-pptx-table, slide-tables",
+              "Description": "",
+              "DocUrl": "405619/presentation-api/slides/work-with-tables",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationTablesController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\DocumentElements\\PresentationTablesController.cs"
+                }
+              ]
+            },
+            {
+              "Id": "Notes",
+              "Url": "Presentation/DocumentElements/Notes",
+              "Title": "Add Speaker Notes",
+              "Keywords": "devexpress, presentation-api, powerpoint-presentation, blazor, speaker-notes, presentation-notes, pptx-notes, slide-notes, add-notes",
+              "Description": "",
+              "DocUrl": "405531/presentation-api/organize-notes",
+              "AdditionalCodeFiles": [
+                {
+                  "Title": "PresentationNotesController.cs",
+                  "Path": "Controllers\\PowerPointPresentation\\DocumentElements\\PresentationNotesController.cs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Search": {
+    "Exclusions": {
+      "Words": "devexpress, dx, devex, demo, demos",
+      "Prefixes": "xtra, dx",
+      "Postfixes": "s, ing, control, e, ies"
+    }
+  }
+}

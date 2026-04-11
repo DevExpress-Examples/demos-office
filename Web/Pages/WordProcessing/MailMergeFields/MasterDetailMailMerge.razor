@@ -1,0 +1,59 @@
+@page "/WordProcessing/MailMergeFields/MasterDetailMailMerge"
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.MailMergeFields
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.WordProcessing
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DefaultFile @ref="defaultFileRef" DefaultDocuments="new List<string>() { DemoDocumentPaths.WordMailMergeMasterDetailTemplateFile }" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Records to Export" ColSpanMd="4">
+            <DxComboBox Data="@mailMergeModel.RecordExportModes" @bind-Value="mailMergeModel.RecordExportMode"
+                        ValueFieldName="Value" TextFieldName="Text" />
+        </DxFormLayoutItem>
+        @if (mailMergeModel.RecordExportMode == RecordExportMode.ActiveRecord) {
+            <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Active Record Number" ColSpanMd="4">
+                <DxSpinEdit @bind-Value="mailMergeModel.ActiveRecordIndex" MinValue="1" MaxValue="5" ShowSpinButtons="true" />
+            </DxFormLayoutItem>
+        }
+        @if (mailMergeModel.RecordExportMode == RecordExportMode.AllRecords) {
+            <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Save Records As" ColSpanMd="4">
+                <DxComboBox Data="@mailMergeModel.DocumentExportModes" @bind-Value="mailMergeModel.DocumentExportMode"
+                            ValueFieldName="Value" TextFieldName="Text" />
+            </DxFormLayoutItem>
+            @if (mailMergeModel.DocumentExportMode == DocumentExportMode.SingleFile) {
+                <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Record Merge Mode" ColSpanMd="4">
+                    <DxComboBox Data="@mailMergeModel.MergeModes" @bind-Value="mailMergeModel.MergeMode"
+                                ValueFieldName="Value" TextFieldName="Text" />
+                </DxFormLayoutItem>
+            }
+        }
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Mail Merge and Save to "
+                                Data="@mailMergeModel.OutputFormats"
+                                @bind-Value="mailMergeModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessDownload)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    DefaultFile defaultFileRef;
+    // Model instance kept client-side only
+    WordMailMergeRegionsModel mailMergeModel = new WordMailMergeRegionsModel();
+
+    async Task ProcessDownload() {
+        using var content = CreateMultipartContent(defaultFileRef?.DefaultFileInfoList.FirstOrDefault()?.Content);
+        content.Add(new StringContent((mailMergeModel.ActiveRecordIndex - 1).ToString()), "ActiveRecordIndex");
+        content.Add(new StringContent(mailMergeModel.DocumentExportMode.ToString()), "DocumentExportMode");
+        content.Add(new StringContent(mailMergeModel.MergeMode.ToString()), "MergeMode");
+        content.Add(new StringContent(mailMergeModel.RecordExportMode.ToString()), "RecordExportMode");
+        AddCommonParameters(content, mailMergeModel.OutputFormat, mailMergeModel.OutputName);
+        var apiUrl = "api/wordprocessing/mail-merge-regions/process";
+        await ExecuteDownloadOperation(apiUrl, content, mailMergeModel.OutputName, mailMergeModel.OutputFormat);
+    }
+}

@@ -1,0 +1,55 @@
+@page "/PdfProcessing/DocumentProtection/PdfValidateSignature"
+@using BlazorDemo.OfficeFileApi.Models.PdfProcessing.DocumentProtection
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.PdfProcessing
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Validation Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PdfSampleSigned" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem ColSpanMd="12">
+            <DxCheckBox @bind-Checked="model.ValidateCrlOcsp">
+                Use CRL/OCSP to validate signatures
+            </DxCheckBox>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="12">
+            <DxCheckBox @bind-Checked="model.ValidateLtv">
+                Use LTV to validate signatures
+            </DxCheckBox>
+        </DxFormLayoutItem>
+        @if (outputReady) {
+            <DxMemo @bind-Text="output"
+                    style="min-height:300px"
+                    ReadOnly="true" />
+        }
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Validate Signature"
+                        Click="() => ProcessDownloadWithLoading(Process)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    string output;
+    bool outputReady = false;
+    // Model instance
+    PdfValidateSignatureModel model = new PdfValidateSignatureModel();
+
+    async Task Process() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        content.Add(new StringContent(model.ValidateCrlOcsp.ToString()), "ValidateCrlOcsp");
+        content.Add(new StringContent(model.ValidateLtv.ToString()), "ValidateLtv");
+
+        // Call controller API
+        var apiUrl = "api/pdfprocessing/document-protection/validate";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.OutputFormat.ToString());
+    }
+}

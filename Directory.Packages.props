@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	<DevExpressPackageVersion>25.2.6</DevExpressPackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+	<PackageVersion Include="DevExpress.Blazor" Version="$(DevExpressPackageVersion)" />
+    <PackageVersion Include="DevExpress.Docs.Presentation" Version="$(DevExpressPackageVersion)" />
+    <PackageVersion Include="DevExpress.Document.Processor" Version="$(DevExpressPackageVersion)" />
+	<PackageVersion Include="Markdig" Version="0.33.0" />
+    <PackageVersion Include="System.Drawing.Common" Version="9.0.0.0" />
+  </ItemGroup>
+</Project>

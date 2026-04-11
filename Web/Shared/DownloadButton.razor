@@ -1,0 +1,50 @@
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<DxButton 
+          Text="@Text"
+          Enabled="@Enabled" 
+          RenderStyle="ButtonRenderStyle.Primary"
+          SubmitFormOnClick="@SubmitFormOnClick"
+          IconCssClass="icon-play"
+          Click="@Click"
+          />
+
+@code {
+    IJSObjectReference downloadButtonJsModule;
+
+    [Parameter]
+    public string Text { get; set; } = "Download";
+
+    [Parameter]
+    public bool Enabled { get; set; } = true;
+
+    [Parameter]
+    public bool SubmitFormOnClick { get; set; } = true;
+
+    [Parameter]
+    public EventCallback Click { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender)
+            downloadButtonJsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./Shared/DownloadButton.razor.js");
+    }
+
+    public async Task Download(string fileName, Stream fileStream) {
+        if (fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 && fileStream.Length > 0) {
+            fileStream.Position = 0;
+            using DotNetStreamReference streamRef = new(fileStream);
+            await downloadButtonJsModule!.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        }
+        else
+            Console.WriteLine("Can't download file");
+    }
+
+    public async ValueTask DisposeAsync() {
+        if (downloadButtonJsModule == null)
+            await ValueTask.CompletedTask;
+        else
+            await downloadButtonJsModule.DisposeAsync();
+    }
+
+}

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DevExpress.Document.Processor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\..\..\Documents\PDF\Sample_Main.pdf">
+			<Link>Documents\PDF\Sample_Main.pdf</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\..\..\Documents\PDF\Sample_Alternative.pdf">
+			<Link>Documents\PDF\Sample_Alternative.pdf</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+﻿@using BlazorDemo.OfficeFileApi.Models
+
+<div class="overview-grid block-content-wrapper">
+  <div class="block-content">
+    @foreach (var info in Infos)
+    {
+      <OverviewCard Info="info" />
+    }
+  </div>
+</div>
+
+
+@code {
+  [Parameter, EditorRequired]
+  public IReadOnlyCollection<OverviewInfo> Infos { get; set; } = new List<OverviewInfo>();
+}

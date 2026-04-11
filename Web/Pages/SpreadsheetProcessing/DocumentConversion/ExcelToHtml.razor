@@ -1,0 +1,48 @@
+@page "/SpreadsheetProcessing/DocumentConversion/ExcelToHtml"
+@using BlazorDemo.OfficeFileApi.Models.Spreadsheet.DocumentConversion
+@inherits DemoPageComponentWithValidation<ExcelToHtmlConversionModel>
+
+@namespace BlazorDemo.OfficeFileApi.Pages.SpreadsheetProcessing
+
+<DemoPageMainLayout Loading="@loading"
+                    EditFormContext="@editFormContext"
+                    AdvancedOptionsZoneCaption="HTML Export Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.SpreadsheetSample" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Sheet Index" ColSpanMd="4">
+            <DxSpinEdit Data="@model.SheetIndex" @bind-Value="model.SheetIndex"
+                        Placeholder="Enter Sheet Index" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" ColSpanMd="4">
+            <DxCheckBox @bind-Checked="model.ExportImages">
+                Export Images
+            </DxCheckBox>
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Convert Document"
+                        Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.SheetIndex.ToString()), "SheetIndex");
+        content.Add(new StringContent(model.ExportImages.ToString()), "ExportImages");
+
+        var apiUrl = "api/spreadsheetprocessing/excel-to-html/convert";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.OutputFormat);
+    }
+}
+
+

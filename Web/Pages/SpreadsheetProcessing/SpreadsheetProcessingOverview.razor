@@ -1,0 +1,91 @@
+﻿@page "/SpreadsheetProcessing"
+
+<div id="doc" class="markdown-body container-fluid overview-page">
+  <h1>DevExpress Excel Spreadsheet API</h1>
+  <p>The <a href="https://docs.devexpress.com/OfficeFileAPI/14912/spreadsheet-document-api" target="_blank" rel="noopener">DevExpress Spreadsheet Document API</a> is a cross-platform .NET library that allows you to create, load, modify, save, and print Microsoft® Excel® workbooks in code. With this library, you can work with worksheets, formulas, charts, pivot tables, data validation, protection, and export to PDF or HTML.</p>
+
+  <h2>Get Started</h2>
+  <h3>Install the <a href="https://www.nuget.org/packages/DevExpress.Document.Processor" target="_blank" rel="noopener">DevExpress.Document.Processor</a> NuGet package</h3>
+  <CodeSnippet Label="CLI" Language="language-bash" Code="@InstallPackageCode" />
+
+  <h3>Code Example - Calculate Formulas and Export a Workbook to PDF</h3>
+  <CodeSnippet Label="C#" Language="language-csharp" Code="@ExportToPdfCode" />
+
+  <h3>Code Example - Create a Workbook from Scratch</h3>
+  <CodeSnippet Label="C#" Language="language-csharp" Code="@WorkbookFromScratchCode" />
+
+  <h2>File Format Support</h2>
+  <ul>
+    <li>Import/Export: <strong>XLSX, XLS, XLSB, XLSM, XLT, XLTX, XLTM, XML, CSV, TXT</strong></li>
+    <li>Export Only: <strong>PDF, HTML, Image Formats (BMP, PNG, JPEG, EMF, WMF, SVG)</strong></li>
+  </ul>
+
+  <h2>Key Features</h2>
+  <p>The DevExpress Spreadsheet Document API allows you to manage Excel files in code:</p>
+  <ul>
+    <li>Generate or edit spreadsheet content</li>
+    <li>Analyze and visualize data with tables, pivot tables, and charts</li>
+    <li>Add and calculate cell formulas</li>
+    <li>Sort, filter, validate, and apply conditional formatting to worksheet data</li>
+    <li>Password-protect and encrypt documents</li>
+    <li>Digitally sign spreadsheets</li>
+    <li>Print and export worksheets</li>
+    <li>And much more</li>
+  </ul>
+
+  <h2>Learning Materials</h2>
+  <ul>
+    <li>
+      <a href="https://www.devexpress.com/products/net/office-file-api/spreadsheet/" target="_blank" rel="noopener">
+        DevExpress Excel Spreadsheet API - Home Page
+      </a>
+    </li>
+    <li>
+      <a href="https://docs.devexpress.com/OfficeFileAPI/14912/spreadsheet-document-api" target="_blank" rel="noopener">
+        DevExpress Excel Spreadsheet API - Documentation
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/orgs/DevExpress-Examples/repositories?q=office-file-api+spreadsheet" target="_blank" rel="noopener">
+        DevExpress Excel Spreadsheet API - GitHub Examples
+      </a>
+    </li>
+    <li>
+      <a href="https://community.devexpress.com/Tags/Office" target="_blank" rel="noopener">
+        DevExpress Office File API - Blogs
+      </a>
+    </li>
+  </ul>
+</div>
+
+@code {
+  static string InstallPackageCode = @"dotnet add package DevExpress.Document.Processor";
+
+  static string ExportToPdfCode = @"
+using DevExpress.Spreadsheet;
+
+using var workbook = new Workbook();
+workbook.LoadDocument(""spreadsheetFile.xlsx"");
+workbook.Calculate();
+MemoryStream pdfStream = new MemoryStream();
+workbook.ExportToPdf(pdfStream);
+".TrimStart().TrimEnd();
+
+  static string WorkbookFromScratchCode = @"
+using DevExpress.Spreadsheet;
+
+using var workbook = new Workbook();
+Worksheet worksheet = workbook.Worksheets[0];
+workbook.BeginUpdate();
+worksheet.Cells[""A1""].Value = ""*"";
+for (int i = 1; i < 11; i++)
+{
+    worksheet.Columns[""A""][i].Value = i;
+    worksheet.Rows[""1""][i].Value = i;
+}
+worksheet.Range[""B2:K11""].Formula = ""=B$1*$A2"";
+workbook.EndUpdate();
+workbook.Calculate();
+workbook.SaveDocument(""TestDoc.xlsx"", DocumentFormat.Xlsx);
+".TrimStart().TrimEnd();
+}

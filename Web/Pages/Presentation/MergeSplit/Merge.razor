@@ -1,0 +1,38 @@
+@page "/Presentation/MergeSplit/Merge"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.MergeSplit
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@mergeModel.AllowedFileExtensions"
+                      DefaultDocuments="new List<string>() { DemoDocumentPaths.PresentationSampleMergeFirst, DemoDocumentPaths.PresentationSampleMergeSecond }"
+                      MaxFileCount="5" />
+    </DocumentZoneLayoutItem>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Merge and Save as "
+                                Data="@mergeModel.OutputFormats"
+                                @bind-Value="mergeModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    PresentationMergeModel mergeModel = new PresentationMergeModel();
+
+    async Task ProcessConversion() {
+        using var content = new MultipartFormDataContent();
+        AddCommonParameters(content, mergeModel.OutputFormat, mergeModel.OutputName);
+
+        AddDocumentsContent(content);
+
+        var apiUrl = "api/presentation/merge/process";
+        await ExecuteDownloadOperation(apiUrl, content, mergeModel.OutputName, mergeModel.OutputFormat);
+    }
+}
+
+

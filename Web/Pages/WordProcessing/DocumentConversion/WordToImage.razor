@@ -1,0 +1,55 @@
+@page "/WordProcessing/DocumentConversion/WordToImage"
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.DocumentConversion
+@inherits DemoPageComponentWithValidation<WordToImageConversionModel>
+
+@namespace BlazorDemo.OfficeFileApi.Pages.WordProcessing
+
+<DemoPageMainLayout Loading="@loading"
+                    EditFormContext="@editFormContext"
+                    AdvancedOptionsZoneCaption="Image Export Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.WordSample" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Image Resolution (DPI)" ColSpanMd="4">
+            <DxComboBox Data="@model.PredefinedResolutions" @bind-Value="@model.Resolution" AllowUserInput="true" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Pages to Export" ColSpanMd="4">
+            <DxComboBox Data="@model.ExportModes" @bind-Value="model.ExportMode"
+                        TextFieldName="Text" ValueFieldName="Value"
+                        Placeholder="Select export mode" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Custom Page Range" ColSpanMd="4">
+            <DxTextBox @bind-Text="model.PageRange"
+                       NullText="1-3, 5, 7-10" Enabled="@model.IsPageRangeEnabled" />
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Convert to "
+                                Data="@model.ImageFormats"
+                                @bind-Value="model.ImageFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.ImageFormat.ToString()), "ImageFormat");
+        content.Add(new StringContent(model.Resolution.ToString()), "Resolution");
+        content.Add(new StringContent(model.ExportMode.ToString()), "ExportMode");
+        if (model.IsPageRangeEnabled)
+            content.Add(new StringContent(model.PageRange), "PageRange");
+
+        var apiUrl = "api/wordprocessing/word-to-image/convert";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.ImageFormat.ToString());
+    }
+}
+
+

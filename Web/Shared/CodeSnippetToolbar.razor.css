@@ -1,0 +1,44 @@
+.code-snippet-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.code-snippet-languages ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 8px;
+}
+
+.copy-code-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.copy-code-btn, .code-snippet-label {
+    font-weight: 600;
+    min-height: 30px;
+    min-width: 45px;
+    border: 0;
+    border-radius: 4px;
+}
+
+.copy-icon {
+    display: inline-block;
+    background-color: currentColor;
+    width: 16px;
+    height: 16px;
+    -webkit-mask: url("images/copy-code.svg") no-repeat center;
+    mask: url("images/copy-code.svg") no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}

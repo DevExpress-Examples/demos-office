@@ -1,0 +1,11 @@
+.overview-grid {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.block-content {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    align-items: stretch;
+}

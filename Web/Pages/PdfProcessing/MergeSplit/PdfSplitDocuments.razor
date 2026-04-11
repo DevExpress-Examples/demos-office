@@ -1,0 +1,52 @@
+@page "/PdfProcessing/MergeSplit/PdfSplitDocuments"
+@using BlazorDemo.OfficeFileApi.Models.PdfProcessing.MergeSplit
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.PdfProcessing
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Split Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PdfSample" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical"
+                          Caption="Extract Pages"
+                          ColSpanMd="4">
+            <DxComboBox @bind-Value="model.ExportMode"
+                        Data="@model.ExportModes" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical"
+                          Caption="Custom Page Range"
+                          ColSpanMd="4">
+            <DxTextBox @bind-Text="model.PageRange"
+                       Enabled="model.ExportMode == RangeExportMode.CustomRange" />
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Split Document"
+                        Click="() => ProcessDownloadWithLoading(Process)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    // Model instance
+    PdfSplitDocumentsModel model = new PdfSplitDocumentsModel();
+
+    async Task Process() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.ExportMode.ToString()), "ExportMode");
+        if (model.ExportMode == RangeExportMode.CustomRange)
+            content.Add(new StringContent(model.PageRange), "PageRange");
+
+        // Call controller API
+        var apiUrl = "api/pdfprocessing/pdf-merge-split/split";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.OutputFormat.ToString());
+    }
+}

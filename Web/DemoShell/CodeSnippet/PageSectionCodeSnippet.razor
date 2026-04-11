@@ -1,0 +1,26 @@
+<DemoScriptLoader @ref=@highlightLoaderRef Src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js" />
+<DemoScriptLoader @ref=@csharp Src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/csharp.min.js" />
+<DemoScriptLoader @ref=@sectionHelper Src="./lib/page-section-helper.js" />
+
+<code @ref=@codeBlockRef class="hljs @Language">@ChildContent</code>
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public string Language { get; set; } = "csharp";
+
+    ElementReference codeBlockRef;
+    DemoScriptLoader highlightLoaderRef;
+    DemoScriptLoader csharp;
+    DemoScriptLoader sectionHelper;
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(firstRender) {
+            try {
+                await Task.WhenAll(highlightLoaderRef!.Loaded, csharp!.Loaded);
+                await highlightLoaderRef!.InvokeVoidAsync("hljs.highlightElement", codeBlockRef);
+                await sectionHelper!.InvokeVoidAsync("DemoPageSectionHelper.initExpandCodeButtons", codeBlockRef);
+            } catch { }
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

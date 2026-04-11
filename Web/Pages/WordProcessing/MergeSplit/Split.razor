@@ -1,0 +1,43 @@
+@page "/WordProcessing/MergeSplit/Split"
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.MergeSplit
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.WordProcessing
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@splitModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.WordSample" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Split Mode" ColSpanMd="4">
+            <DxComboBox Data="@splitModel.SplitModes" @bind-Value="splitModel.SplitMode"
+                        TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Split and Save as "
+                                Data="@splitModel.OutputFormats"
+                                @bind-Value="splitModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessDownload)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+@code {
+    WordSplitDocumentModel splitModel = new WordSplitDocumentModel();
+
+    async Task ProcessDownload() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, splitModel.OutputFormat, splitModel.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(splitModel.SplitMode.ToString()), "SplitMode");
+
+        var apiUrl = "api/wordprocessing/word-split/process";
+        await ExecuteDownloadOperation(apiUrl, content, splitModel.OutputName, splitModel.OutputFormat);
+    }
+}
+
+

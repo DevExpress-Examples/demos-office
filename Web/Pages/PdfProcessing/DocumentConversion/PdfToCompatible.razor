@@ -1,0 +1,39 @@
+@page "/PdfProcessing/DocumentConversion/PdfToCompatible"
+@using BlazorDemo.OfficeFileApi.Models.PdfProcessing.DocumentConversion
+@using DevExpress.Pdf
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.PdfProcessing
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PdfSample" />
+    </DocumentZoneLayoutItem>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                @bind-Value="model.CompatibilityLevel"
+                                Data="@model.CompatibilityLevels"
+                                Text="Convert to"
+                                Click="() => ProcessDownloadWithLoading(Process)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+@code {
+    // Model instance
+    PdfToCompatibleModel model = new PdfToCompatibleModel();
+
+    async Task Process() {
+        // Create multipart form data
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.CompatibilityLevel.ToString()), "CompatibilityLevel");
+
+        // Call controller API
+        string apiUrl = "api/pdfprocessing/document-conversion/pdf-to-compatible";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.OutputFormat.ToString());
+    }
+}

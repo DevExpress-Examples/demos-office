@@ -1,0 +1,90 @@
+﻿@page "/Presentation"
+
+<div id="doc" class="markdown-body container-fluid overview-page">
+  <h1>DevExpress PowerPoint Presentation API</h1>
+  <p>The <a href="https://docs.devexpress.com/OfficeFileAPI/405405/presentation-api/overview" target="_blank" rel="noopener">DevExpress Presentation API</a> is a cross-platform .NET library that allows you to manage Microsoft PowerPoint presentation files. Use available APIs to create, edit, read, merge, split, print, export, and digitally sign presentations.  All this functionality is available in your .NET applications without Microsoft Office dependencies.</p>
+
+  <h2>Get Started</h2>
+  <h3>Install the <a href="https://www.nuget.org/packages/DevExpress.Docs.Presentation" target="_blank" rel="noopener">DevExpress.Docs.Presentation</a> NuGet package</h3>
+  <CodeSnippet Label="CLI" Language="language-bash" Code="@InstallPackageCode" />
+
+  <h3>Code Example - Create a New Presentation from Scratch</h3>
+  <CodeSnippet Label="C#" Language="language-csharp" Code="@PresentationFromScratchCode" />
+
+  <h3>Code Example - Convert a Presentation to PDF</h3>
+  <CodeSnippet Label="C#" Language="language-csharp" Code="@ConvertToPdfCode" />
+
+
+  <h2>File Format Support</h2>
+  <ul>
+    <li>Import/Export: <strong>PPTX, PPTM, POTX, POTM</strong></li>
+    <li>Export Only: <strong>PDF</strong></li>
+  </ul>
+
+  <h2>Key Features</h2>
+  <ul>
+    <li>Generate new PowerPoint presentations from scratch using comprehensive APIs</li>
+    <li>Merge, copy, and split presentations with full slide control</li>
+    <li>Export presentations to PDF with high-quality rendering</li>
+    <li>Cross-platform printing support</li>
+    <li>170+ shape types including figures, connectors, tables, and image formats</li>
+    <li>Full control over text, paragraph, shape, and slide formatting</li>
+    <li>Add, remove, duplicate, and customize slides and layouts</li>
+    <li>Extract and modify slide text and speaker notes</li>
+    <li>Read and update presentation metadata</li>
+  </ul>
+
+  <h2>Learning Materials</h2>
+  <ul>
+    <li><a href="https://www.devexpress.com/products/net/office-file-api/powerpoint-presentation-api/" target="_blank" rel="noopener">DevExpress Presentation API - Home Page</a></li>
+    <li><a href="https://docs.devexpress.com/OfficeFileAPI/405405/presentation-api/overview" target="_blank" rel="noopener">DevExpress Presentation API - Documentation</a></li>
+    <li><a href="https://github.com/orgs/DevExpress-Examples/repositories?q=office-file-api+presentation" target="_blank" rel="noopener">DevExpress Presentation API - GitHub Examples</a></li>
+    <li><a href="https://community.devexpress.com/Tags/Office" target="_blank" rel="noopener">DevExpress Office File API - Blogs</a></li>
+  </ul>
+</div>
+
+@code {
+  static string InstallPackageCode = @"dotnet add package DevExpress.Docs.Presentation";
+
+  static string PresentationFromScratchCode = @"
+using DevExpress.Docs.Presentation;
+//...
+// Create a presentation with a single empty slide
+Presentation presentation = new Presentation();
+// Configure Slide Master
+SlideMaster slideMaster = presentation.SlideMasters[0];
+slideMaster.Background = new CustomSlideBackground(new SolidFill(Color.FromArgb(194, 228, 249)));
+
+// Add a new slide with content
+presentation.Slides.Clear();
+Slide slide1 = new Slide(slideMaster.Layouts.Get(SlideLayoutType.Title));
+foreach (Shape shape in slide1.Shapes) {
+    if (shape.Placeholder.Type is PlaceholderType.CenteredTitle) {
+        TextArea textArea = new TextArea();
+        TextParagraph paragraph = new TextParagraph();
+        paragraph.Runs.Add(new TextRun { Text = ""Daily Testing Status Report"" });
+        textArea.Paragraphs.Add(paragraph);
+        shape.TextArea = textArea;
+    }
+    if (shape.Placeholder.Type is PlaceholderType.Subtitle) {
+        TextArea textArea = new TextArea();
+        TextParagraph paragraph = new TextParagraph();
+        paragraph.Runs.Add(new TextRun { Text = $""{DateTime.Now: dddd, MMMM d, yyyy}"" });
+        textArea.Paragraphs.Add(paragraph);
+        shape.TextArea = textArea;
+    }
+}
+presentation.Slides.Add(slide1);
+
+// Save Presentation to PPTX
+FileStream outputStream = new FileStream(@""D:\mypresentation.pptx"", FileMode.Create);
+presentation.SaveDocument(outputStream);".TrimStart();
+
+  static string ConvertToPdfCode = @"
+using DevExpress.Docs.Presentation;
+//...
+// Load a Presentation
+Presentation presentation = new Presentation(File.ReadAllBytes(""mypresentation.pptx""));
+// Export to PDF
+presentation.ExportToPdf(new FileStream(@""D:\exported-document.pdf"", FileMode.Create));".TrimStart();
+}

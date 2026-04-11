@@ -1,0 +1,15 @@
+.overview-page :where(p) {
+    margin-bottom: 1rem;
+}
+
+.overview-page :where(h1, h2, h3, h4, h5, h6) {
+    margin-top: 1.5rem;
+}
+
+.overview-page :where(h1, h2) {
+    margin-bottom: 1rem;
+}
+
+.overview-page :where(h3, h4, h5, h6) {
+    margin-bottom: 0.5rem;
+}

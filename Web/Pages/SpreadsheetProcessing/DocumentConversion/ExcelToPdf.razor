@@ -1,0 +1,65 @@
+@page "/SpreadsheetProcessing/DocumentConversion/ExcelToPdf"
+@using BlazorDemo.OfficeFileApi.Models.Spreadsheet.DocumentConversion
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.SpreadsheetProcessing
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Export Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@conversionModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.SpreadsheetSample" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="PDF/A Conformance Level" ColSpanMd="4">
+            <DxComboBox Data="@conversionModel.PdfAConformanceLevels" @bind-Value="conversionModel.PdfA"
+                        TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="PDF/UA Compatibility" ColSpanMd="4">
+            <DxComboBox Data="@conversionModel.PdfUACompatibilityLevels" @bind-Value="conversionModel.PdfUA"
+                        TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Author" ColSpanMd="4">
+            <DxTextBox @bind-Text="@conversionModel.Author" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Title" ColSpanMd="4">
+            <DxTextBox @bind-Text="@conversionModel.Title" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Subject" ColSpanMd="4">
+            <DxTextBox @bind-Text="@conversionModel.Subject" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Keywords" ColSpanMd="4">
+            <DxTextBox @bind-Text="@conversionModel.Keywords" />
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Convert to PDF"
+                        Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    ExcelToPdfConversionModel conversionModel = new ExcelToPdfConversionModel();
+
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, conversionModel.OutputFormat, conversionModel.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(conversionModel.PdfA.ToString()), "PdfA");
+        content.Add(new StringContent(conversionModel.PdfUA.ToString()), "PdfUA");
+        content.Add(new StringContent(conversionModel.Author ?? string.Empty), "Author");
+        content.Add(new StringContent(conversionModel.Title ?? string.Empty), "Title");
+        content.Add(new StringContent(conversionModel.Subject ?? string.Empty), "Subject");
+        content.Add(new StringContent(conversionModel.Keywords ?? string.Empty), "Keywords");
+
+        var apiUrl = "api/spreadsheetprocessing/excel-to-pdf/convert";
+        await ExecuteDownloadOperation(apiUrl, content, conversionModel.OutputName, conversionModel.OutputFormat);
+    }
+}
+
+

@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+		<RootNamespace>BlazorDemo.OfficeFileApi</RootNamespace>
+		<AssemblyName>BlazorDemo.OfficeFileApi.Server</AssemblyName>
+		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+		<GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<EnableDefaultItems>false</EnableDefaultItems>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="appsettings.json" />
+		<EmbeddedResource Include="demo-metadata.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="Controllers\**\*.cs" />
+		<Compile Include="Data\*.cs" />
+		<Compile Include="DemoShell\**\*.cs" />
+		<Content Include="DemoShell\**\*.razor" />
+		<Content Include="DemoShell\**\*.razor.css" />
+		<Content Include="DemoShell\**\*.razor.js" />
+		<Content Include="Documents\**\*.*">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Compile Include="Models\**\*.cs" />
+		<Compile Include="Pages\**\*.cs" />
+		<Content Include="Pages\**\*.razor" />
+		<Content Include="Pages\**\*.razor.css" />
+		<Content Include="Pages\**\*.razor.js" />
+		<Content Include="Pages\**\*.md" />
+		<Compile Include="Services\**\*.cs" />
+		<Compile Include="Shared\**\*.cs" />
+		<Content Include="Shared\**\*.razor" />
+		<Content Include="Shared\**\*.razor.css" />
+		<Content Include="Shared\**\*.razor.js" />
+		<Compile Include="Utils\**\*.cs" />
+		<Compile Include="*.cs" />
+		<Content Include="*.razor" />
+		<Content Include="*.razor.css" />
+		<Content Include="*.razor.js" />
+		<Content Include="*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Markdig" />
+		<PackageReference Include="System.Drawing.Common" />
+		<PackageReference Include="DevExpress.Blazor" />
+		<PackageReference Include="DevExpress.Docs.Presentation" />
+		<PackageReference Include="DevExpress.Document.Processor" />
+	</ItemGroup>
+	<ItemGroup>
+		<DotnetPublishFiles Include="wwwroot/**;*.json">
+			<DestinationRelativePath>%(RelativeDir)%(Filename)%(Extension)</DestinationRelativePath>
+		</DotnetPublishFiles>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="wwwroot\%2a%2a\**" />
+	  <Content Remove="wwwroot\%2a%2a\**" />
+	  <DotnetPublishFiles Remove="wwwroot\%2a%2a\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="NOTICE.txt" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="wwwroot\" />
+	</ItemGroup>
+
+
+	<Target Name="LinkStatic" BeforeTargets="PreBuildEvent;BeforeBuild;PrepareForBuild">
+		<Message Text="Creating links for static assets" />
+		<Exec Command="if not exist &quot;wwwroot/_content&quot; mkdir &quot;wwwroot/_content&quot;" />
+		<Exec Command="if not exist &quot;wwwroot/_content/DevExpress.Blazor&quot; mklink /J &quot;wwwroot/_content/DevExpress.Blazor&quot; &quot;../../Blazor/DevExpress.Blazor/wwwroot&quot;" />
+		<Exec Command="if not exist &quot;wwwroot/_content/DevExpress.Blazor.Themes&quot; mklink /J &quot;wwwroot/_content/DevExpress.Blazor.Themes&quot; &quot;../../Blazor/DevExpress.Blazor.Themes/wwwroot&quot;" />
+		<Exec Command="if not exist &quot;wwwroot/_content/DevExpress.Blazor.Themes.Fluent&quot; mklink /J &quot;wwwroot/_content/DevExpress.Blazor.Themes.Fluent&quot; &quot;../../Blazor/DevExpress.Blazor.Themes.Fluent/wwwroot&quot;" />
+		<Exec Command="if not exist &quot;wwwroot/_content/DevExpress.Blazor.Resources&quot; mklink /J &quot;wwwroot/_content/DevExpress.Blazor.Resources&quot; &quot;../../Blazor/DevExpress.Blazor.Resources/wwwroot&quot;" />
+	</Target>
+
+	<Target Name="SourceCode" BeforeTargets="PreBuildEvent">
+		<ItemGroup>
+			<Message Text="Embedding source code" />
+			<EmbeddedResource Include="Pages\**\*.*" />
+			<EmbeddedResource Include="Data\**\*.*" />
+			<EmbeddedResource Include="Services\**\*.*" />
+			<EmbeddedResource Include="Controllers\**\*.*" />
+			<EmbeddedResource Include="Shared\**\*.*" />
+			<EmbeddedResource Include="wwwroot\css\*.css" />
+		</ItemGroup>
+	</Target>
+
+</Project>

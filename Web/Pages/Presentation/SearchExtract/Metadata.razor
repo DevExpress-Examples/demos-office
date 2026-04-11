@@ -1,0 +1,48 @@
+@page "/Presentation/SearchExtract/Metadata"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.SearchExtract
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@metadataModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PresentationSample" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem ColSpanMd="12">
+            <DxCheckBox @bind-Checked="metadataModel.ReadDocumentProperties">
+                Read Document Properties
+            </DxCheckBox>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="12">
+            <DxCheckBox @bind-Checked="metadataModel.ReadCustomProperties">
+                Read Custom Document Properties
+            </DxCheckBox>
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Extract Metadata"
+                        Click="() => ProcessDownloadWithLoading(ProcessRead)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+@code {
+    PresentationMetadataModel metadataModel = new PresentationMetadataModel();
+
+    async Task ProcessRead() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, metadataModel.OutputFormat, metadataModel.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(metadataModel.ReadDocumentProperties.ToString()), "ReadDocumentProperties");
+        content.Add(new StringContent(metadataModel.ReadCustomProperties.ToString()), "ReadCustomProperties");
+
+        var apiUrl = "api/presentation/metadata/read";
+        await ExecuteDownloadOperation(apiUrl, content, metadataModel.OutputName, metadataModel.OutputFormat);
+    }
+}
+
+

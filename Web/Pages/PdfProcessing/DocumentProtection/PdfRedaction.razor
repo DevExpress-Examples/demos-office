@@ -1,0 +1,55 @@
+@page "/PdfProcessing/DocumentProtection/PdfRedaction"
+@using BlazorDemo.OfficeFileApi.Models.PdfProcessing.DocumentProtection
+@inherits DemoPageComponentWithValidation<PdfRedactionModel>
+
+@namespace BlazorDemo.OfficeFileApi.Pages.PdfProcessing
+
+<DemoPageMainLayout Loading="@loading"
+                    EditFormContext="@editFormContext"
+                    AdvancedOptionsZoneCaption="Redaction Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PdfSample" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical"
+                          Caption="Redacted Text"
+                          ColSpanMd="4">
+            <DxTextBox @bind-Text="model.SearchText" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical"
+                          Caption="Overlay Text"
+                          ColSpanMd="4">
+            <DxTextBox @bind-Text="model.RedactionText" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="4">
+            <DxCheckBox @bind-Checked="model.ApplyRedaction">
+                Apply Redaction
+            </DxCheckBox>
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Redact Document"
+                        Click="() => ProcessDownloadWithLoading(Process)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    async Task Process() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.SearchText), "SearchText");
+        if (model.RedactionText != null)
+            content.Add(new StringContent(model.RedactionText), "RedactionText");
+        content.Add(new StringContent(model.ApplyRedaction.ToString()), "ApplyRedaction");
+
+        // Call controller API
+        var apiUrl = "api/pdfprocessing/document-protection/add-redaction";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.OutputFormat.ToString());
+    }
+}

@@ -1,0 +1,44 @@
+﻿@inject NavigationManager NavigationManager
+
+@namespace BlazorDemo.OfficeFileApi
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta data-dxmetadatamanager />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="@(NavigationManager.BaseUri)" />
+
+  <meta property="og:url" content="https://demos.devexpress.com/OfficeFileAPI/BlazorServer/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Office File API" />
+  <meta property="og:description" content="Unlock powerful document processing features with DevExpress Office File API. Easily create, read, write, convert, sign, and merge Word, Excel, and PDF files without the need for Microsoft Office or Adobe dependencies." />
+  <meta http-equiv="Content-Security-Policy"
+        content="base-uri 'self';
+            default-src 'self';
+            img-src 'self' data: blob:;
+            object-src 'none';
+            script-src 'self' https://cdn.jsdelivr.net/;
+            worker-src 'self' blob:;
+            frame-src 'self';
+            style-src 'self' https://cdn.jsdelivr.net/ 'unsafe-inline';
+            font-src 'self';
+            connect-src 'self';
+            block-all-mixed-content;">
+  @DxResourceManager.RegisterTheme(DevExpress.Blazor.Themes.Fluent)
+  <link rel="stylesheet" href="_content/DevExpress.Blazor.Themes.Fluent/bootstrap/fluent-light.bs5.min.css" />
+  <link rel="stylesheet" href="css/fluent/common.css" />
+  <link rel="stylesheet" href="css/dx-demo.css" asp-append-version="true" dx-demo-link />
+  <link rel="stylesheet" href="css/site.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="stylesheet" href="BlazorDemo.OfficeFileApi.Server.styles.css" asp-append-version="true" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/github.css">
+</head>
+<body>
+  <Routes @rendermode="InteractiveServer" />
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+  <script src="_framework/blazor.web.js"></script>
+</body>
+</html>

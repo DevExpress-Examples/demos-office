@@ -1,0 +1,64 @@
+@page "/PdfProcessing/DocumentConversion/PdfToImage"
+@using BlazorDemo.OfficeFileApi.Models.PdfProcessing.DocumentConversion
+@inherits DemoPageComponentWithValidation<PdfToImageModel>
+
+@namespace BlazorDemo.OfficeFileApi.Pages.PdfProcessing
+
+<DemoPageMainLayout Loading="@loading"
+                    EditFormContext="@editFormContext"
+                    AdvancedOptionsZoneCaption="Image Export Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PdfSample" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical"
+                          Caption="Image Resolution (DPI)"
+                          ColSpanMd="4">
+            <DxComboBox Data="@model.PredefinedResolutions"
+                        @bind-Value="@model.Resolution"
+                        AllowUserInput="true" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical"
+                          Caption="Export Mode"
+                          ColSpanMd="4">
+            <DxComboBox Data="@model.ExportModes"
+                        @bind-Value="model.ExportMode"
+                        TextFieldName="Text"
+                        ValueFieldName="Value" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical"
+                          Caption="Custom Page Range"
+                          ColSpanMd="4">
+            <DxTextBox @bind-Text="model.PageRange"
+                       NullText="1-3, 5, 7-10"
+                       Enabled="@model.IsPageRangeEnabled" />
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                @bind-Value="model.ImageFormat"
+                                Data="@model.ImageFormats"
+                                Text="Convert to"
+                                Click="() => ProcessDownloadWithLoading(Process)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    async Task Process() {
+        using var content = CreateMultipartContent();
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.ImageFormat), "ImageFormat");
+        content.Add(new StringContent(model.Resolution.ToString()), "Resolution");
+        content.Add(new StringContent(model.ExportMode.ToString()), "ExportMode");
+        if (model.IsPageRangeEnabled)
+            content.Add(new StringContent(model.PageRange), "PageRange");
+
+        // Call controller API
+        var apiUrl = "api/pdfprocessing/document-conversion/pdf-to-image";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.ImageFormat.ToString());
+    }
+}

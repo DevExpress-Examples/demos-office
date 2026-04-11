@@ -1,0 +1,116 @@
+@using DevExpress.Blazor.Navigation.Internal
+@inject IJSRuntime JS
+@inject DemoConfiguration Configuration
+@inject NavigationManager NavigationManager
+
+@if (!VisibleGroups.Any() && SearchResult != null) {
+    <div class="search-no-results">No results found for <b>@SearchResult.RequestString</b>.</div>
+} else {
+    @foreach (var group in VisibleGroups) {
+        var groupTitle = GetGroupTitle(group);
+
+        <div class="demo-group">
+            <h5 class="demo-group-title">@groupTitle</h5>
+        </div>
+
+        <DxTreeView @ref="@treeView"
+                    CssClass="sidebar-tree"
+                    UrlMatchMode="NavigationUrlMatchMode.Exact"
+                    NodeExpandCollapseAction="TreeViewNodeExpandCollapseAction.NodeClick"
+                    AllowSelectNodes="true"
+                    TextWrapEnabled="true" aria-label="@GetTreeLabel(group)">
+            <Nodes>
+                @foreach (var demoPage in group.GetNavTreeChildren(Configuration.IsSiteMode).Where(p => IsVisibleItem(p))) {
+                    <NavMenuLeaf ActivePage="@ActivePage" DemoItem="@demoPage" SearchResult="@SearchResult"></NavMenuLeaf>
+                }
+            </Nodes>
+        </DxTreeView>
+    }
+}
+
+@code {
+    IJSObjectReference navMenuJsModule;
+    DxTreeView treeView { set => treeViews.Add(value); }
+
+    List<DxTreeView> treeViews = new();
+
+    public IEnumerable<DemoGroup> Groups { get => Configuration.Groups; }
+
+    bool IsVisibleGroup(DemoGroup group) {
+        return SearchResult == null || SearchResult.ContainsInHierarchy(group);
+    }
+
+    bool IsVisibleItem(DemoItem item) {
+        return SearchResult == null || SearchResult.ContainsInHierarchy(item);
+    }
+
+    protected IEnumerable<DemoGroup> VisibleGroups { get => Groups.Where(g => IsVisibleGroup(g)); }
+
+    string activePage = null;
+    protected string ActivePage { get { return activePage ??= NavigationManager.GetCurrentPageName().Split('?')[0]; } }
+
+    public MarkupString GetGroupTitle(DemoGroup group) {
+        if (SearchResult == null)
+            return new(group.Title);
+        return new(SearchResult.GetHighlightedMarkup(group.Title));
+    }
+
+    public string GetTreeLabel(DemoGroup group) {
+        return !Configuration.IsSingleProduct && !string.IsNullOrEmpty(group.NavigationAriaLabel) ? group.NavigationAriaLabel : null;
+    }
+
+    [Parameter] public DemoSearchResult SearchResult { get; set; }
+
+    async Task UpdateSelectionAsync() {
+        foreach (var treeView in treeViews) {
+            treeView.ClearSelection();
+            treeView.SelectNode(n => IsSelectedNode(n, ActivePage));
+            var treeViewSelectedNode = treeView.GetSelectedNodeInfo();
+            if (treeViewSelectedNode != null) {
+                treeView.ExpandToNode((n) => n.Name == treeViewSelectedNode.Name);
+                var nodeInfo = treeView.GetSelectedNodeInfo() as TreeViewItemModel;
+                if (nodeInfo != null)
+                    await navMenuJsModule!.InvokeVoidAsync("ensureNodeVisible", nodeInfo.Id);
+            }
+        }
+    }
+
+    protected override void OnInitialized() {
+        NavigationManager.LocationChanged += OnLocationChanged;
+        base.OnInitialized();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender)
+            navMenuJsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./DemoShell/NavMenu.razor.js");
+        await UpdateSelectionAsync();
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override async void OnParametersSet() {
+        await UpdateSelectionAsync();
+        base.OnParametersSet();
+    }
+
+    public void Dispose() {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    async void OnLocationChanged(object sender, LocationChangedEventArgs args) {
+        activePage = null;
+        await UpdateSelectionAsync();
+    }
+
+    bool IsSelectedNode(ITreeViewNodeInfo node, string currentUri) {
+        return IsSelectedNode(node.NavigateUrl, currentUri);
+    }
+
+    bool IsSelectedNode(string navigateUrl, string currentUrl) {
+        if (string.IsNullOrEmpty(navigateUrl)) return false;
+
+        return currentUrl.EndsWith($"/{navigateUrl}", StringComparison.OrdinalIgnoreCase) ||
+               (currentUrl == NavigationManager.BaseUri && navigateUrl == "./") ||
+               currentUrl.Equals(navigateUrl, StringComparison.OrdinalIgnoreCase) ||
+               currentUrl.EndsWith(navigateUrl.Split('#')[0], StringComparison.OrdinalIgnoreCase);
+    }
+}

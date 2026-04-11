@@ -1,0 +1,40 @@
+﻿@namespace BlazorDemo.OfficeFileApi.Pages
+
+<DemoPageSectionComponent>
+    <DemoChildContent>
+        <DxLoadingPanel Visible="@Loading"
+                        IsContentBlocked="true"
+                        ApplyBackgroundShading="false"
+                        IndicatorAreaVisible="true"
+                        Text="In progress...">
+            @if (EditFormContext != null) {
+                <EditForm Context="editFormContext" EditContext="@EditFormContext">
+                    <DataAnnotationsValidator />
+                    <DemoPageMainLayoutBase AdvancedOptionsZoneCaption="@AdvancedOptionsZoneCaption"
+                                            DocumentZoneLayoutItem="@DocumentZoneLayoutItem"
+                                            MainOptionsZoneLayoutGroup="@MainOptionsZoneLayoutGroup"
+                                            AdvancedOptionsZoneLayoutGroup="@AdvancedOptionsZoneLayoutGroup"
+                                            ButtonZoneLayoutItem="@ButtonZoneLayoutItem" />
+                </EditForm>
+            } else {
+                <DemoPageMainLayoutBase AdvancedOptionsZoneCaption="@AdvancedOptionsZoneCaption"
+                                        DocumentZoneLayoutItem="@DocumentZoneLayoutItem"
+                                        MainOptionsZoneLayoutGroup="@MainOptionsZoneLayoutGroup"
+                                        AdvancedOptionsZoneLayoutGroup="@AdvancedOptionsZoneLayoutGroup"
+                                        ButtonZoneLayoutItem="@ButtonZoneLayoutItem" />
+            }
+        </DxLoadingPanel>
+    </DemoChildContent>
+</DemoPageSectionComponent>
+
+@code {
+    [Parameter] public bool Loading { get; set; }
+    [Parameter] public EditContext EditFormContext { get; set; }
+
+    [Parameter] public string AdvancedOptionsZoneCaption { get; set; }
+
+    [Parameter] public RenderFragment DocumentZoneLayoutItem { get; set; }
+    [Parameter] public RenderFragment MainOptionsZoneLayoutGroup { get; set; }
+    [Parameter] public RenderFragment AdvancedOptionsZoneLayoutGroup { get; set; }
+    [Parameter] public RenderFragment ButtonZoneLayoutItem { get; set; }
+}

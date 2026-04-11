@@ -1,0 +1,69 @@
+﻿@page "/PdfProcessing"
+
+<div id="doc" class="markdown-body container-fluid overview-page">
+  <h1>DevExpress PDF Document API</h1>
+  <p>The <a href="https://docs.devexpress.com/OfficeFileAPI/16491/pdf-document-api" target="_blank" rel="noopener">DevExpress PDF Document API</a> is a non-visual .NET library that allows you to generate, convert, merge, split, edit, password-protect, and digitally sign PDF files. Add markup annotations and fill interactive forms, extract text, apply digital signatures, and redact PDFs directly from .NET code.</p>
+
+  <h2>Get Started</h2>
+  <h3>Install the <a href="https://www.nuget.org/packages/DevExpress.Document.Processor" target="_blank" rel="noopener">DevExpress.Document.Processor</a> NuGet package</h3>
+  <CodeSnippet Label="CLI" Language="language-bash" Code="@InstallPackageCode" />
+
+  <h3>Code Example - Encrypt PDF with Access Permissions</h3>
+  <CodeSnippet Label="C#" Language="language-csharp" Code="@EncryptPdfCode" />
+
+  <h3>Code Example - Merge two PDF documents into a Single File</h3>
+  <CodeSnippet Label="C#" Language="language-csharp" Code="@MergePdfCode" />
+
+  <h2>Key Features</h2>
+  <p>The DevExpress PDF Document API allows you to manage PDF documents in code:</p>
+  <ul>
+    <li>Generate or edit document content</li>
+    <li>Merge or split files, manage pages</li>
+    <li>Annotate and comment PDF files</li>
+    <li>Create, fill, and edit interactive forms</li>
+    <li>Password-protect documents</li>
+    <li>Digitally sign PDF files</li>
+    <li>Convert to PDF/A compliant files</li>
+    <li>Attach ZUGFeRD invoices</li>
+    <li>Print and export to image formats</li>
+    <li>And much more</li>
+  </ul>
+
+  <h2>Learning Materials</h2>
+  <ul>
+    <li><a href="https://www.devexpress.com/products/net/office-file-api/pdf/" target="_blank" rel="noopener">DevExpress PDF Document API - Home Page</a></li>
+    <li><a href="https://docs.devexpress.com/OfficeFileAPI/16491/pdf-document-api" target="_blank" rel="noopener">DevExpress PDF Document API - Documentation</a></li>
+    <li><a href="https://github.com/orgs/DevExpress-Examples/repositories?q=pdf-document-api" target="_blank" rel="noopener">DevExpress PDF Document API - GitHub Examples</a></li>
+    <li><a href="https://community.devexpress.com/Tags/Office" target="_blank" rel="noopener">DevExpress Office File API - Blogs</a></li>
+  </ul>
+</div>
+
+@code {
+  static string InstallPackageCode = @"dotnet add package DevExpress.Document.Processor";
+
+  static string EncryptPdfCode = @"
+using DevExpress.Pdf;
+
+using var pdfProcessor = new PdfDocumentProcessor();
+pdfProcessor.LoadDocument(""pdfDocument.pdf"");
+PdfEncryptionOptions encryptionOptions = new PdfEncryptionOptions();
+encryptionOptions.DataExtractionPermissions = PdfDocumentDataExtractionPermissions.NotAllowed;
+encryptionOptions.OwnerPasswordString = ""OwnerPassword"";
+encryptionOptions.UserPasswordString = ""UserPassword"";
+encryptionOptions.Algorithm = PdfEncryptionAlgorithm.AES256;
+MemoryStream pdfEncryptedStream = new MemoryStream();
+pdfProcessor.SaveDocument(pdfEncryptedStream, new PdfSaveOptions() { EncryptionOptions = encryptionOptions })
+".TrimStart().TrimEnd();
+
+  static string MergePdfCode = @"
+using DevExpress.Pdf;
+
+using var pdfProcessor = new PdfDocumentProcessor();
+pdfProcessor.CreateEmptyDocument();
+pdfProcessor.AppendDocument(docStream1);
+pdfProcessor.AppendDocument(docStream2);
+MemoryStream mergedPdfStream = new MemoryStream();
+pdfProcessor.SaveDocument(mergedPdfStream);
+mergedPdfStream.Position = 0;
+".TrimStart().TrimEnd();
+}

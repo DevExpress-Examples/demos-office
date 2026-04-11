@@ -1,0 +1,59 @@
+@page "/Presentation/DocumentElements/Tables"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.DocumentElements
+@inherits DemoPageComponentWithValidation<PresentationTableModel>
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading"
+                    EditFormContext="@editFormContext">
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Number of Rows" ColSpanMd="4">
+            <DxSpinEdit @bind-Value="model.NumberOfRows" MinValue="1" MaxValue="50" Increment="1" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Number of Columns" ColSpanMd="4">
+            <DxSpinEdit @bind-Value="model.NumberOfColumns" MinValue="1" MaxValue="20" Increment="1" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Column Width" ColSpanMd="4">
+            <DxSpinEdit @bind-Value="model.ColumnWidth" MinValue="0.1f" MaxValue="10f" Increment="0.1f" DisplayFormat="0.0\'\'" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Table Style" ColSpanMd="4">
+            <DxComboBox Data="@model.TableStyles" @bind-Value="model.TableStyle" TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Table Style Options" ColSpanMd="8">
+            <DxTagBox @bind-Values="model.StyleOption"
+                      TData="EnumWrapper<TableStyleOption>"
+                      TValue="TableStyleOption"
+                      ValueFieldName="Value"
+                      TextFieldName="DisplayName"
+                      Data="@model.StyleOptions" />
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Generate and Save as "
+                                Data="@model.OutputFormats"
+                                @bind-Value="model.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessGenerate)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    async Task ProcessGenerate() {
+        using var content = new MultipartFormDataContent();
+        content.Add(new StringContent(model.NumberOfRows.ToString()), "NumberOfRows");
+        content.Add(new StringContent(model.NumberOfColumns.ToString()), "NumberOfColumns");
+        content.Add(new StringContent(model.ColumnWidth.ToString()), "ColumnWidth");
+        content.Add(new StringContent(model.TableStyle.ToString()), "TableStyle");
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        foreach (var option in model.StyleOption)
+            content.Add(new StringContent(option.ToString()), "StyleOption");
+
+        var apiUrl = "api/presentation/tables/generate";
+        string extension = model.IsPdfOutput ? "pdf" : model.OutputFormat;
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, extension);
+    }
+}
+
+

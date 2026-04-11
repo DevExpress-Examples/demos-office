@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DevExpress.Docs.Presentation" />
+		<PackageReference Include="DevExpress.Document.Processor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\..\..\Documents\Sample_first.pptx">
+			<Link>Documents\Sample_first.pptx</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\..\..\Documents\Sample_second.pptx">
+			<Link>Documents\Sample_second.pptx</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+</Project>

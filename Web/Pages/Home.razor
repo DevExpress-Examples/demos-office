@@ -1,0 +1,43 @@
+﻿@page "/"
+@using BlazorDemo.OfficeFileApi.Models
+
+<h1>Office File API</h1>
+<div>
+    The <a href="https://www.devexpress.com/products/net/office-file-api/">DevExpress Office File API</a>  is a non-visual library that allows you to process rich text documents, spreadsheets, presentations, and PDFs in your .NET applications, without dependencies on Microsoft or Adobe tools.
+    This demo includes modules that convert documents from one format to another, work with templates and mail merge, populate interactive PDF forms, apply security and protection to file content, split and merge documents, and manipulate various content types.
+</div>
+<OverviewGrid Infos="TestInfos"/>
+
+@code {
+  public static List<OverviewInfo> TestInfos = new List<OverviewInfo>
+  {
+    new OverviewInfo
+    {
+      Title = "Word Document API",
+      Description = "Use this cross-platform and high-performance library to create, edit, mail-merge, secure, and export Microsoft Word documents (DOCX, TXT, RTF, DOTX, HTML, and others).",
+      ClickUri = "WordProcessing",
+      ImageUri = "images/overview/document-processing.svg"
+    },
+    new OverviewInfo
+    {
+      Title = "Excel Spreadsheet API",
+      Description = "Use this cross-platform and comprehensive library to create, analyze, and modify Excel spreadsheets (XLS, XLSX, XLSM, CSV). Work with worksheets, formulas, charts, pivot tables, data validation, protection, and export to PDF or HTML.",
+      ClickUri = "SpreadsheetProcessing",
+      ImageUri = "images/overview/spreadsheet.svg"
+    },
+    new OverviewInfo
+    {
+      Title = "PowerPoint Presentation API",
+      Description = "Use this cross-platform library to generate, edit, merge, print/export, and digitally sign PowerPoint presentations (PPTX, PPTM, POTX, POTM). Access and modify slides, layouts, masters, shapes, text, tables, themes, and headers/footers.",
+      ClickUri = "Presentation",
+      ImageUri = "images/overview/presentation.svg"
+    },
+    new OverviewInfo
+    {
+      Title = "PDF Document API",
+      Description = "Use this cross-platform and high-performance library to create, edit, split/merge, print, and protect PDF documents. Add annotations and forms, extract text, and digitally sign PDFs.",
+      ClickUri = "PdfProcessing",
+      ImageUri = "images/overview/pdf.svg"
+    },
+  };
+}

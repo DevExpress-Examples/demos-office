@@ -1,0 +1,42 @@
+@page "/WordProcessing/DocumentConversion/WordToWord"
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.DocumentConversion
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.WordProcessing
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Conversion Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef" AllowedFileExtensions="@conversionModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.WordSample" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" ColSpanMd="12">
+            <DxCheckBox @bind-Checked="conversionModel.EmbedFonts">Embed fonts</DxCheckBox>
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Convert Document to "
+                                Data="@conversionModel.OutputFormats"
+                                @bind-Value="conversionModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    WordToWordConversionModel conversionModel = new WordToWordConversionModel();
+
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, conversionModel.OutputFormat, conversionModel.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(conversionModel.EmbedFonts.ToString()), "EmbedFonts");
+
+        var apiUrl = "api/wordprocessing/word-to-word/convert";
+        await ExecuteDownloadOperation(apiUrl, content, conversionModel.OutputName, conversionModel.OutputFormat);
+    }
+}
+
+

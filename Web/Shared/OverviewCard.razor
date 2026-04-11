@@ -1,0 +1,21 @@
+﻿@inject NavigationManager NavigationManager
+@using BlazorDemo.OfficeFileApi.Models
+
+<div class="overview-card content-item">
+    <a href="@Info.ClickUri">
+        <div class="overview-card-img-container">
+            @if (!string.IsNullOrEmpty(Info.ImageUri)) {
+                <img class='@Info.ImageClass' src='@(NavigationManager.ToAbsoluteUri(Info.ImageUri))' alt='@Info.Title' />
+            }
+        </div>
+        <div class="overview-card-text-container">
+            <h3><b>@Info.Title</b></h3>
+            <p>@Info.Description</p>
+        </div>
+    </a>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public OverviewInfo Info { get; set; }
+}

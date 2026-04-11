@@ -1,0 +1,35 @@
+@page "/Presentation/DocumentConversion/PresentationToPresentation"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.DocumentConversion
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@conversionModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PresentationSample" />
+    </DocumentZoneLayoutItem>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Convert Presentation to "
+                                Data="@conversionModel.OutputFormats"
+                                @bind-Value="conversionModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    PresentationToPresentationConversionModel conversionModel = new PresentationToPresentationConversionModel();
+
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, conversionModel.OutputFormat, conversionModel.OutputName);
+
+        var apiUrl = "api/presentation/presentation-to-presentation/convert";
+        await ExecuteDownloadOperation(apiUrl, content, conversionModel.OutputName, conversionModel.OutputFormat);
+    }
+}
+
+

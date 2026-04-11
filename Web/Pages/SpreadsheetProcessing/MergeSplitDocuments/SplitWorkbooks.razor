@@ -1,0 +1,42 @@
+@page "/SpreadsheetProcessing/MergeSplitDocuments/SplitWorkbooks"
+@using BlazorDemo.OfficeFileApi.Models.Spreadsheet.MergeSplitDocuments
+@inherits DemoPageComponentBase
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Split Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@splitWorkbooksModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.SpreadsheetDocumentSplitDefaultFile" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Split Mode" ColSpanMd="4">
+            <DxComboBox Data="@splitWorkbooksModel.SplitModes" @bind-Value="splitWorkbooksModel.SplitMode"
+                        TextFieldName="Text" ValueFieldName="Value"
+                        Placeholder="Select export mode" />
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Split and Save as "
+                                Data="@splitWorkbooksModel.OutputFormats"
+                                @bind-Value="splitWorkbooksModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessDownload)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+@code {
+    // Model instance
+    ExcelSplitWorkbooksModel splitWorkbooksModel = new ExcelSplitWorkbooksModel();
+
+    async Task ProcessDownload() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, splitWorkbooksModel.OutputFormat, splitWorkbooksModel.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(splitWorkbooksModel.SplitMode.ToString()), "SplitMode");
+
+        var apiUrl = "api/spreadsheetprocessing/split-workbooks/split";
+        await ExecuteDownloadOperation(apiUrl, content, splitWorkbooksModel.OutputName, splitWorkbooksModel.OutputFormat);
+    }
+}
+

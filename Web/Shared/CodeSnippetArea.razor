@@ -1,0 +1,38 @@
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<div class="code-snippet-area" @ref="root">
+  <pre>
+  <code id="@CodeId" class="code-snippet-content @Language">
+        @Code
+    </code>
+  </pre>
+</div>
+
+@using BlazorDemo.OfficeFileApi.Utils
+@using Microsoft.AspNetCore.Components
+
+@code {
+  [Parameter]
+  public string CodeId { get; set; } = $"code-{Guid.NewGuid():N}";
+  [Parameter, EditorRequired]
+  public string Label { get; set; }
+  [Parameter, EditorRequired]
+  public string Code { get; set; }
+  [Parameter]
+  public string Language { get; set; } = "language-csharp";
+
+  ElementReference root;
+  IJSObjectReference module;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    module ??= await JS.InvokeAsync<IJSObjectReference>("import", "./Shared/CodeSnippetArea.razor.js");
+    await module.InvokeVoidAsync("highlightAllUnder", root);
+  }
+
+  public ValueTask DisposeAsync()
+  {
+    return JsModuleHelper.SafeDisposeAsync(module);
+  }
+}

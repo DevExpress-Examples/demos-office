@@ -1,0 +1,74 @@
+@page "/WordProcessing/DocumentConversion/WordToPdf"
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.DocumentConversion
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.WordProcessing
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Export Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@conversionModel.AllowedFileExtensions"
+                      DefaultDocuments="new List<string>() { DemoDocumentPaths.WordSample }" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="PDF/A Conformance Level" ColSpanMd="4">
+            <DxComboBox Data="@conversionModel.PdfAConformanceLevels" @bind-Value="conversionModel.PdfA"
+                        TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="PDF/UA Compatibility" ColSpanMd="4">
+            <DxComboBox Data="@conversionModel.PdfUACompatibilityLevels" @bind-Value="conversionModel.PdfUA"
+                        TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Author" ColSpanMd="4">
+            <DxTextBox @bind-Text="@conversionModel.Author" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Title" ColSpanMd="4">
+            <DxTextBox @bind-Text="@conversionModel.Title" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Subject" ColSpanMd="4">
+            <DxTextBox @bind-Text="@conversionModel.Subject" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Keywords" ColSpanMd="4">
+            <DxTextBox @bind-Text="@conversionModel.Keywords" />
+        </DxFormLayoutItem>
+        @if (conversionModel.CanExportAsAcroFormFields) {
+            <DxFormLayoutItem ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical">
+                <DxCheckBox @bind-Checked="conversionModel.ExportControlsAsAcroFormFields">
+                    Export Controls as AcroForm
+                </DxCheckBox>
+            </DxFormLayoutItem>
+        }
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Convert to PDF"
+                        Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+@code {
+    // Model instance
+    WordToPdfConversionModel conversionModel = new WordToPdfConversionModel();
+
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, conversionModel.OutputFormat, conversionModel.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(conversionModel.PdfA.ToString()), "PdfA");
+        content.Add(new StringContent(conversionModel.PdfUA.ToString()), "PdfUA");
+        content.Add(new StringContent(conversionModel.Author ?? string.Empty), "Author");
+        content.Add(new StringContent(conversionModel.Title ?? string.Empty), "Title");
+        content.Add(new StringContent(conversionModel.Subject ?? string.Empty), "Subject");
+        content.Add(new StringContent(conversionModel.Keywords ?? string.Empty), "Keywords");
+        if (conversionModel.CanExportAsAcroFormFields)
+            content.Add(new StringContent(conversionModel.ExportControlsAsAcroFormFields.ToString()), "ExportControlsAsAcroFormFields");
+
+        var apiUrl = "api/wordprocessing/word-to-pdf/convert";
+        await ExecuteDownloadOperation(apiUrl, content, conversionModel.OutputName, conversionModel.OutputFormat);
+    }
+}
+
+

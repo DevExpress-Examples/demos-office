@@ -1,0 +1,27 @@
+@inject IJSRuntime JS
+@inject NavigationManager NavigationManager
+@using BlazorDemo.OfficeFileApi.Models
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.DocumentConversion
+
+<div class="d-flex">
+    <span class="info-text">@Title</span>
+</div>
+
+<DxFormLayout CssClass="mt-14">
+    <DxFormLayoutGroup Decoration="FormLayoutGroupDecoration.None">
+        <DxFormLayoutItem ColSpanMd="12">
+            <DefaultFileBase @ref="defaultFileRef" DefaultDocuments="@DefaultDocuments" />
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+@code {
+    // Parameters
+    [Parameter] public string Title { get; set; } = "Sample document";
+    [Parameter] public List<string> DefaultDocuments { get; set; } = new List<string>();
+
+    public List<DefaultFileInfo> DefaultFileInfoList => defaultFileRef.DefaultFileInfoList;
+
+    // Internal state
+    DefaultFileBase defaultFileRef;
+}

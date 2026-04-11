@@ -1,0 +1,49 @@
+@page "/PdfProcessing/DocumentProtection/PdfApplyWatermark"
+@using BlazorDemo.OfficeFileApi.Models.PdfProcessing.DocumentProtection
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.PdfProcessing
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PdfSample" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical"
+                          Caption="Watermark Text"
+                          ColSpanMd="4">
+            <DxTextBox @bind-Text="model.WatermarkText" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="4">
+            <DxCheckBox @bind-Checked="model.Rotate">
+                Rotate 45°
+            </DxCheckBox>
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Apply Watermark"
+                        Click="() => ProcessDownloadWithLoading(Process)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    // Model instance
+    PdfApplyWatermarkModel model = new PdfApplyWatermarkModel();
+
+    async Task Process() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.WatermarkText), "WatermarkText");
+        content.Add(new StringContent(model.Rotate.ToString()), "Rotate");
+
+        // Call controller API
+        var apiUrl = "api/pdfprocessing/document-protection/apply-watermark";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.OutputFormat.ToString());
+    }
+}

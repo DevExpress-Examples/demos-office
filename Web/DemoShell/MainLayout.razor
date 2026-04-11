@@ -1,0 +1,215 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject DemoConfiguration Configuration
+@inject DemoThemeService Themes
+
+<DemoScriptLoader @ref=@pageHelper Src="./lib/page-helper.js" />
+
+<div class="@GetDemoHeaderContainerCss()">
+    <nav class="demo-header p-0 navbar navbar-dark">
+        <DemoLayoutToggleButton @bind-Toggled="@LayoutToggled" />
+        <div class="logo-image">
+            <a href="https://www.devexpress.com/" target="_blank" title="DevExpress">
+                <span class="logo-img"></span>
+            </a>
+            <div class="logo-sep"></div>
+            <a href="" target="_blank" title="Office File API Demos Home Page" >
+                <span class="logo-sec-img"></span>
+            </a>
+        </div>
+        <div class="demo-btn-container d-flex">
+            <DxButton NavigateUrl="https://go.devexpress.com/DevexpressDownload_UniversalTrial.aspx"
+                CssClass="download-btn"
+                IconCssClass="demo-download-icon"
+                Text="Free Trial" SizeMode="SizeMode.Large"></DxButton>
+        </div>
+    </nav>
+</div>
+<div class="@GetDemoBreadcrumbsContainerCss()">
+    <div class="breadcrumb">
+        <div class="@GetDemoBreadcrumbsCss()">
+            <DemoBreadcrumbs></DemoBreadcrumbs>
+        </div>
+    </div>
+</div>
+<div class="@GetDemoContentContainerCss()" @ref="@contentContainerRef">
+    <div class="demo-content @LayoutStateCssClass">
+        <div class="sidebar">
+            <DemoSideBar></DemoSideBar>
+        </div>
+        <div class="main">
+            <div class="content">
+                <CascadingValue Value="@ThemeName" Name="ThemeName">
+                    @Body
+                </CascadingValue>
+            </div>
+            <div class="content-footer"></div>
+        </div>
+        @if(!_isDesktop) {
+            <DemoModalBackdrop Shown="@ModalBackgroundShown" ShownChanged="@ModalBackdropShownChanged" />
+        }
+    </div>
+</div>
+
+@code {
+    static readonly int DateTimeNowYear = DateTime.Now.Year;
+
+    string _themeName;
+    bool _layoutToggled;
+    bool _isDesktop = true;
+    ElementReference contentContainerRef;
+
+    DemoScriptLoader pageHelper;
+
+    [Inject]
+    IDemoVersion DemoVersion { get; set; }
+    [Inject]
+    protected NavigationManager NavigationManager { get; set; }
+    [Inject]
+    IJSRuntime JsRuntime { get; set; }
+
+
+    protected string ThemeName {
+        get { return _themeName; }
+        set {
+            if(_themeName != value && value != null) {
+                _themeName = value;
+                Themes.SetActiveThemeByName(value);
+            }
+        }
+    }
+
+    protected bool IsBootstrapNative {
+        get { return Themes!.ActiveTheme!.IsBootstrapNative; }
+    }
+
+    protected override void OnInitialized() {
+        if (Themes!.ActiveTheme != null)
+            ThemeName = Themes!.ActiveTheme!.Name;
+        else
+            ThemeName = "default";
+        NavigationManager!.LocationChanged += OnLocationChanged;
+    }
+
+    void TryRedirect(string url) {
+        if(TryGetRedirectUrl(url, out var uri))
+            NavigationManager!.NavigateTo(uri, true);
+    }
+    protected bool TryGetRedirectUrl(string currentUrl, out string redirectUrl) {
+        redirectUrl = "";
+        return currentUrl?.Length > NavigationManager!.BaseUri?.Length && Configuration!.Redirects!.TryGetValue(currentUrl.Substring(NavigationManager.BaseUri.Length).ToLower(), out redirectUrl!);
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        TryRedirect(NavigationManager!.Uri);
+        if(firstRender) {
+            await ScrollToMainTopIfNeeded(NavigationManager.Uri);
+
+            await pageHelper!.InvokeVoidAsync("DemoPageHelper.demoMatchesQuery", "(min-width: 1200px)", DotNetObjectReference.Create(this));
+            await pageHelper.InvokeVoidAsync("DemoPageHelper.patchAppElement");
+        }
+        else {
+            await pageHelper!.InvokeVoidAsync("DemoPageHelper.themes.setThemeName", DemoThemeService.ThemeCookieKey, ThemeName);
+
+            if(_isDesktop && SavedLayoutToggled != LayoutToggled)
+                await pageHelper.InvokeVoidAsync("DemoPageHelper.raiseWindowOnResize");
+        }
+        await ScrollToTargetIfNeeded(NavigationManager.Uri);
+        SavedLayoutToggled = LayoutToggled;
+        IsFirstTimeRendered = true;
+    }
+    async void OnLocationChanged(object sender, LocationChangedEventArgs args) {
+        TryRedirect(args.Location);
+        if(!_isDesktop) {
+            LayoutToggled = false;
+        }
+        await ScrollToMainTopIfNeeded(args.Location);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    [JSInvokable]
+    public async Task OnQueryChanged(bool isDesktop) {
+        if(_isDesktop != isDesktop) {
+            _isDesktop = isDesktop;
+            LayoutToggled = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    bool LayoutToggled {
+        get { return _layoutToggled; }
+        set {
+            if(_layoutToggled != value)
+                _layoutToggled = value;
+        }
+    }
+    string LayoutStateCssClass { get { return IsFirstTimeRendered ? ((_isDesktop && LayoutToggled || !_isDesktop && !LayoutToggled) ? "sidebar-hidden" : "sidebar-shown") : ""; } }
+    bool SavedLayoutToggled { get; set; }
+    bool ModalBackgroundShown { get { return !_isDesktop && LayoutToggled; } }
+    bool IsFirstTimeRendered { get; set; }
+
+    void ModalBackdropShownChanged(bool shown) {
+        if(!shown) {
+            LayoutToggled = false;
+        }
+    }
+    bool HasAnchorInUrl(string uri) {
+        return !string.IsNullOrEmpty(NavigationManager!.ToAbsoluteUri(uri).Fragment.Replace("#", ""));
+    }
+    async Task ScrollToMainTopIfNeeded(string uri) {
+        if(!HasAnchorInUrl(uri))
+            await pageHelper!.InvokeVoidAsync("DemoPageHelper.scroll.toElementTop", contentContainerRef);
+    }
+    async Task ScrollToTargetIfNeeded(string uri) {
+        if(HasAnchorInUrl(uri))
+            await pageHelper!.InvokeVoidAsync("DemoPageHelper.scroll.ensureNavigationTargetIsVisible");
+    }
+    string GetDemoContentContainerCss() {
+        List<string> cssClasses = new List<string>();
+        cssClasses.Add("demo-content-container");
+#if !VISUALTESTS
+        if(IsFirstTimeRendered)
+            cssClasses.Add("animated");
+#endif
+        cssClasses.Add(GetThemeCssClass());
+        if(IsBootstrapNative)
+            cssClasses.Add("theme-external");
+        return string.Join(" ", cssClasses);
+    }
+    string GetThemeCssClass() {
+        // if (Themes.ActiveTheme.IsFluent) {
+        //     switch (Themes.ThemeState.Mode) {
+        //         case ThemeMode.Light:
+                    return "theme-fluent-light";
+        //         case ThemeMode.Dark:
+        //             return "theme-fluent-dark";
+        //     }
+        // }
+
+        // return "theme-" + ThemeName!.Replace(" ", "-");
+    }
+    string GetDemoBreadcrumbsContainerCss() {
+        List<string> cssClasses = new List<string>();
+        cssClasses.Add("demo-breadcrumbs-container");
+        cssClasses.Add("theme-" + ThemeName!.Replace(" ", "-"));
+        if(IsBootstrapNative)
+            cssClasses.Add("theme-external");
+        return string.Join(" ", cssClasses);
+    }
+    string GetDemoBreadcrumbsCss() {
+        List<string> cssClasses = new List<string>();
+        cssClasses.Add("demo-breadcrumbs");
+        cssClasses.Add(LayoutStateCssClass);
+        return string.Join(" ", cssClasses);
+    }
+    string GetDemoHeaderContainerCss() {
+        List<string> cssClasses = new List<string>();
+        cssClasses.Add("demo-header-container");
+        cssClasses.Add("theme-" + ThemeName!.Replace(" ", "-"));
+        if(IsBootstrapNative)
+            cssClasses.Add("theme-external");
+        return string.Join(" ", cssClasses);
+    }
+    public void Dispose() {
+        NavigationManager!.LocationChanged -= OnLocationChanged;
+    }
+}

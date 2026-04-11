@@ -1,0 +1,34 @@
+﻿@namespace BlazorDemo.OfficeFileApi.Pages
+
+<DxFormLayout>
+    @if (DocumentZoneLayoutItem != null) {
+        <DxFormLayoutGroup ColSpanMd="8" CssClass="offset-md-2" HeaderCssClass="p-0">
+            <DxFormLayoutItem CssClass="w-100 group-no-margin-bottom">
+                @DocumentZoneLayoutItem
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    }
+    @if (MainOptionsZoneLayoutGroup != null) {
+        <DxFormLayoutGroup ColSpanMd="8" CssClass="offset-md-2" HeaderCssClass="p-0">
+            @MainOptionsZoneLayoutGroup
+        </DxFormLayoutGroup>
+    }
+    @if (AdvancedOptionsZoneLayoutGroup != null) {
+        <DxFormLayoutGroup ColSpanMd="8" CssClass="offset-md-2" Caption="@AdvancedOptionsZoneCaption"
+                           ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" Expanded="false">
+            @AdvancedOptionsZoneLayoutGroup
+        </DxFormLayoutGroup>
+    }
+    <DxFormLayoutItem ColSpanMd="8" CssClass="offset-md-2">
+        @ButtonZoneLayoutItem
+    </DxFormLayoutItem>
+</DxFormLayout>
+
+@code {
+    [Parameter] public string AdvancedOptionsZoneCaption { get; set; }
+
+    [Parameter] public RenderFragment DocumentZoneLayoutItem { get; set; }
+    [Parameter] public RenderFragment MainOptionsZoneLayoutGroup { get; set; }
+    [Parameter] public RenderFragment AdvancedOptionsZoneLayoutGroup { get; set; }
+    [Parameter] public RenderFragment ButtonZoneLayoutItem { get; set; }
+}

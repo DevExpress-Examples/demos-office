@@ -1,0 +1,78 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/PdfProcessing/" />
+  <Folder Name="/PdfProcessing/DocumentConversion/">
+    <Project Path="PdfProcessing/DocumentConversion/PdfToCompatible/PdfToCompatible.csproj" />
+    <Project Path="PdfProcessing/DocumentConversion/PdfToImage/PdfToImage.csproj" />
+  </Folder>
+  <Folder Name="/PdfProcessing/DocumentProtection/">
+    <Project Path="PdfProcessing/DocumentProtection/PdfApplyWatermark/PdfApplyWatermark.csproj" />
+    <Project Path="PdfProcessing/DocumentProtection/PdfDigitalSignature/PdfDigitalSignature.csproj" />
+    <Project Path="PdfProcessing/DocumentProtection/PdfEncryptPassword/PdfEncryptPassword.csproj" />
+    <Project Path="PdfProcessing/DocumentProtection/PdfRedaction/PdfRedaction.csproj" />
+    <Project Path="PdfProcessing/DocumentProtection/PdfValidateSignature/PdfValidateSignature.csproj" />
+  </Folder>
+  <Folder Name="/PdfProcessing/MergeSplit/">
+    <Project Path="PdfProcessing/MergeSplit/PdfMergeDocuments/PdfMergeDocuments.csproj" />
+    <Project Path="PdfProcessing/MergeSplit/PdfSplitDocuments/PdfSplitDocuments.csproj" />
+  </Folder>
+  <Folder Name="/PowerPointPresentation/" />
+  <Folder Name="/PowerPointPresentation/DocumentConversion/">
+    <Project Path="PowerPointPresentation/DocumentConversion/PresentationToPdf/PresentationToPdf.csproj" />
+    <Project Path="PowerPointPresentation/DocumentConversion/PresentationToPresentation/PresentationToPresentation.csproj" />
+  </Folder>
+  <Folder Name="/PowerPointPresentation/DocumentElements/">
+    <Project Path="PowerPointPresentation/DocumentElements/PresentationNotes/PresentationNotes.csproj" />
+    <Project Path="PowerPointPresentation/DocumentElements/PresentationTables/PresentationTables.csproj" />
+  </Folder>
+  <Folder Name="/PowerPointPresentation/MergeSplit/">
+    <Project Path="PowerPointPresentation/MergeSplit/PresentationMerge/PresentationMerge.csproj" />
+    <Project Path="PowerPointPresentation/MergeSplit/PresentationSplit/PresentationSplit.csproj" />
+  </Folder>
+  <Folder Name="/PowerPointPresentation/SearchExtract/">
+    <Project Path="PowerPointPresentation/SearchExtract/PresentationExtractImages/PresentationExtractImages.csproj" />
+    <Project Path="PowerPointPresentation/SearchExtract/PresentationExtractText/PresentationExtractText.csproj" />
+    <Project Path="PowerPointPresentation/SearchExtract/PresentationFindReplace/PresentationFindReplace.csproj" />
+    <Project Path="PowerPointPresentation/SearchExtract/PresentationMetadata/PresentationMetadata.csproj" />
+  </Folder>
+  <Folder Name="/SpreadsheetProcessing/" />
+  <Folder Name="/SpreadsheetProcessing/DocumentConversion/">
+    <Project Path="SpreadsheetProcessing/DocumentConversion/ExcelToExcel/ExcelToExcel.csproj" />
+    <Project Path="SpreadsheetProcessing/DocumentConversion/ExcelToHtml/ExcelToHtml.csproj" />
+    <Project Path="SpreadsheetProcessing/DocumentConversion/ExcelToImage/ExcelToImage.csproj" />
+    <Project Path="SpreadsheetProcessing/DocumentConversion/ExcelToPdf/ExcelToPdf.csproj" />
+  </Folder>
+  <Folder Name="/SpreadsheetProcessing/DocumentProtection/">
+    <Project Path="SpreadsheetProcessing/DocumentProtection/ExcelDigitalSignature/ExcelDigitalSignature.csproj" />
+    <Project Path="SpreadsheetProcessing/DocumentProtection/ExcelEncryptPassword/ExcelEncryptPassword.csproj" />
+    <Project Path="SpreadsheetProcessing/DocumentProtection/ExcelProtectWorkbook/ExcelProtectWorkbook.csproj" />
+    <Project Path="SpreadsheetProcessing/DocumentProtection/ExcelProtectWorksheet/ExcelProtectWorksheet.csproj" />
+  </Folder>
+  <Folder Name="/SpreadsheetProcessing/MergeSplitDocuments/">
+    <Project Path="SpreadsheetProcessing/MergeSplitDocuments/ExcelMergeWorkbooks/ExcelMergeWorkbooks.csproj" />
+    <Project Path="SpreadsheetProcessing/MergeSplitDocuments/ExcelSplitWorkbooks/ExcelSplitWorkbooks.csproj" />
+  </Folder>
+  <Folder Name="/WordProcessing/" />
+  <Folder Name="/WordProcessing/DocumentConversion/">
+    <Project Path="WordProcessing/DocumentConversion/WordToImage/WordToImage.csproj" />
+    <Project Path="WordProcessing/DocumentConversion/WordToPdf/WordToPdf.csproj" />
+    <Project Path="WordProcessing/DocumentConversion/WordToWord/WordToWord.csproj" />
+  </Folder>
+  <Folder Name="/WordProcessing/DocumentProtection/">
+    <Project Path="WordProcessing/DocumentProtection/WordDigitalSignature/WordDigitalSignature.csproj" />
+    <Project Path="WordProcessing/DocumentProtection/WordEncryptPassword/WordEncryptPassword.csproj" />
+    <Project Path="WordProcessing/DocumentProtection/WordProtectPassword/WordProtectPassword.csproj" />
+  </Folder>
+  <Folder Name="/WordProcessing/MailMergeFields/">
+    <Project Path="WordProcessing/MailMergeFields/WordMailMerge/WordMailMerge.csproj" />
+    <Project Path="WordProcessing/MailMergeFields/WordMailMergeRegions/WordMailMergeRegions.csproj" />
+  </Folder>
+  <Folder Name="/WordProcessing/MergeSplit/">
+    <Project Path="WordProcessing/MergeSplit/Merge/Merge.csproj" />
+    <Project Path="WordProcessing/MergeSplit/Split/Split.csproj" />
+  </Folder>
+</Solution>

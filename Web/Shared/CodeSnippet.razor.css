@@ -1,0 +1,17 @@
+.code-snippet {
+    min-width: 300px;
+    border: 1px solid var(--dxds-color-border-neutral-default-rest);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.code-snippet-row {
+    /* padding: 5px; */
+    border-bottom: 1px solid var(--dxds-color-border-neutral-default-rest);
+}
+
+    .code-snippet-row:last-child {
+        border-bottom: none;
+    }

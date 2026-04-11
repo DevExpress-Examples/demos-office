@@ -1,0 +1,59 @@
+@page "/Presentation/SearchExtract/FindReplace"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.SearchExtract
+@inherits DemoPageComponentWithValidation<PresentationFindReplaceModel>
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading"
+                    EditFormContext="@editFormContext">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PresentationSample" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Operation Type" ColSpanMd="4">
+            <DxComboBox Data="@model.OperationTypes" @bind-Value="model.Operation"
+                        TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Find what" ColSpanMd="4">
+            <DxTextBox @bind-Text="model.SearchText" />
+        </DxFormLayoutItem>
+        @if (model.IsReplaceOperation) {
+            <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Replace with" ColSpanMd="4">
+                <DxTextBox @bind-Text="model.ReplaceText" />
+            </DxFormLayoutItem>
+        }
+        @if (model.IsHighlightOperation) {
+            <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Highlight Color" ColSpanMd="4">
+                <ColorDropDown @bind-Value="@model.Color" />
+            </DxFormLayoutItem>
+        }
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Modify Presentation and Save to "
+                                Data="@model.OutputFormats"
+                                @bind-Value="model.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessDownload)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    async Task ProcessDownload() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.Color.ToString() ?? string.Empty), "HighlightColor");
+        content.Add(new StringContent(model.Operation.ToString()), "Operation");
+        content.Add(new StringContent(model.ReplaceText ?? string.Empty), "ReplaceText");
+        content.Add(new StringContent(model.SearchText), "SearchText");
+
+        var apiUrl = "api/presentation/find-replace/process";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.OutputFormat);
+    }
+}
+
+

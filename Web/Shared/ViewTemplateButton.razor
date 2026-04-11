@@ -1,0 +1,48 @@
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+This module processes a predefined document. Download it to see the document structure.
+<br />
+<DxButton 
+          Text="Download Template"
+          RenderStyle="ButtonRenderStyle.Primary"
+          SubmitFormOnClick="false"
+          IconCssClass="icon-play"
+          Click="OnViewTemplateButtonClick"
+          />
+@code {
+    IJSObjectReference viewTemplateButtonJsModule;
+
+    [Parameter]
+    public string Template { get; set; }
+
+    [Parameter]
+    public EventCallback Click { get; set; }
+
+    async Task OnViewTemplateButtonClick() {
+        await Click.InvokeAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender)
+            viewTemplateButtonJsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./Shared/ViewTemplateButton.razor.js");
+    }
+
+    public async Task Download(string fileName, Stream fileStream) {
+        if (fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 && fileStream.Length > 0) {
+            fileStream.Position = 0;
+            using DotNetStreamReference streamRef = new(fileStream);
+            await viewTemplateButtonJsModule!.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        }
+        else
+            Console.WriteLine("Can't download file");
+    }
+
+    public async ValueTask DisposeAsync() {
+        if (viewTemplateButtonJsModule == null)
+            await ValueTask.CompletedTask;
+        else
+            await viewTemplateButtonJsModule.DisposeAsync();
+    }
+
+}

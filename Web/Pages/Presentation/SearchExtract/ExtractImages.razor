@@ -1,0 +1,51 @@
+@page "/Presentation/SearchExtract/ExtractImages"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.SearchExtract
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Extraction Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@extractionModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PresentationSample" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Extract Images From" ColSpanMd="4">
+            <DxComboBox Data="@extractionModel.ImageExtractModes" @bind-Value="extractionModel.ImageExtractMode"
+                        TextFieldName="Text" ValueFieldName="Value" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Custom Slide Range" ColSpanMd="4">
+            <DxTextBox @bind-Text="extractionModel.SlideRange"
+                       NullText="1-3, 5, 7-10" Enabled="@extractionModel.IsSlideRangeEnabled" />
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Extract Images as "
+                                Data="@extractionModel.ImageFormats"
+                                @bind-Value="extractionModel.ImageFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    PresentationExtractImagesModel extractionModel = new PresentationExtractImagesModel();
+
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, extractionModel.OutputFormat, extractionModel.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(extractionModel.ImageFormat.ToString()), "ImageFormat");
+        content.Add(new StringContent(extractionModel.ImageExtractMode.ToString()), "ImageExtractMode");
+        if (extractionModel.IsSlideRangeEnabled)
+            content.Add(new StringContent(extractionModel.SlideRange.ToString()), "SlideRange");
+
+        var apiUrl = "api/presentation/extract-images/process";
+        await ExecuteDownloadOperation(apiUrl, content, extractionModel.OutputName, extractionModel.OutputFormat);
+    }
+}
+
+

@@ -1,0 +1,36 @@
+@page "/SpreadsheetProcessing/MergeSplitDocuments/MergeWorkbooks"
+@using BlazorDemo.OfficeFileApi.Models.Spreadsheet.MergeSplitDocuments
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.SpreadsheetProcessing
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@mergeWorkbooksModel.AllowedFileExtensions"
+                      DefaultDocuments="new List<string>() { DemoDocumentPaths.SpreadsheetSample, DemoDocumentPaths.SpreadsheetDocumentProtectionDefaultFile }"
+                      MaxFileCount="5" />
+    </DocumentZoneLayoutItem>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Merge and Save as "
+                                Data="@mergeWorkbooksModel.OutputFormats"
+                                @bind-Value="mergeWorkbooksModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessDownload)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+@code {
+    ExcelMergeWorkbooksModel mergeWorkbooksModel = new ExcelMergeWorkbooksModel();
+
+    async Task ProcessDownload() {
+        // Create multipart form data
+        using var content = new MultipartFormDataContent();
+
+        AddCommonParameters(content, mergeWorkbooksModel.OutputFormat, mergeWorkbooksModel.OutputName);
+        AddDocumentsContent(content);
+
+        var apiUrl = "api/spreadsheetprocessing/merge-workbooks/merge";
+        await ExecuteDownloadOperation(apiUrl, content, mergeWorkbooksModel.OutputName, mergeWorkbooksModel.OutputFormat);
+    }
+}

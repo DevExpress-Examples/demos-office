@@ -1,0 +1,33 @@
+@page "/Presentation/DocumentConversion/PresentationToPdf"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.DocumentConversion
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@conversionModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.PresentationSample" />
+    </DocumentZoneLayoutItem>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Convert Presentation to PDF"
+                        Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    PresentationToPdfConversionModel conversionModel = new PresentationToPdfConversionModel();
+
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, conversionModel.OutputFormat, conversionModel.OutputName);
+
+        var apiUrl = "api/presentation/presentation-to-pdf/convert";
+        await ExecuteDownloadOperation(apiUrl, content, conversionModel.OutputName, conversionModel.OutputFormat);
+    }
+}
+
+

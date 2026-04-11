@@ -1,0 +1,10 @@
+.code-snippet-area {
+    padding: 16px;
+}
+.code-snippet-content {
+    line-height: 1.25;
+    font-size: 12px;
+}
+.code-snippet-area pre{
+    margin-bottom: 0
+}

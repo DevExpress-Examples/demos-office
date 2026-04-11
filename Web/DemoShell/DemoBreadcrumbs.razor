@@ -1,0 +1,53 @@
+@implements IDisposable
+@inject DemoConfiguration Configuration
+@inject NavigationManager NavigationManager
+
+<div class="items">
+    @foreach (var item in Items) {
+        @if (!string.IsNullOrEmpty(item.Item2)) {
+            <a href="@item.Item2">@item.Item1</a>
+        } else {
+            <span>@item.Item1</span>
+        }
+        <span class="separator"></span>
+    }
+</div>
+
+@code {
+    const string HomePageTitle = "Home";
+    List<Tuple<string, string>> Items { get; set; } = new List<Tuple<string, string>>();
+
+    protected override void OnInitialized() {
+        NavigationManager.LocationChanged += OnLocationChanged;
+        UpdateItems(NavigationManager.Uri);
+    }
+    void OnLocationChanged(object sender, LocationChangedEventArgs args) {
+        UpdateItems(args.Location);
+    }
+    void UpdateItems(string currentUri) {
+        Items.Clear();
+
+        var currentPage = Configuration.GetDemoPageByUrl(NavigationManager, currentUri);
+        if (currentPage != null) {
+            var demoPage = currentPage;
+            while (demoPage != null) {
+                var url = demoPage.GetUrl() != currentPage.GetUrl() ? demoPage.GetUrl() : "";
+                Items.Insert(0, new(demoPage!.Title!, url!));
+                demoPage = demoPage.ParentPage;
+            }
+            var group = currentPage.Group;
+            var firstGroupPage = group?.Pages?.FirstOrDefault();
+            if (group != null && firstGroupPage != null) {
+                Items.Insert(0, new(group.Title, firstGroupPage.Url));
+            }
+            Items.Insert(0, new(HomePageTitle, "./"));
+        } else {
+            Items.Add(new(HomePageTitle, ""));
+        }
+        StateHasChanged();
+    }
+
+    public void Dispose() {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}

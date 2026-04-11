@@ -1,0 +1,60 @@
+@page "/SpreadsheetProcessing/DocumentConversion/ExcelToImage"
+@using BlazorDemo.OfficeFileApi.Models.Spreadsheet.DocumentConversion
+@inherits DemoPageComponentWithValidation<ExcelToImageConversionModel>
+
+@namespace BlazorDemo.OfficeFileApi.Pages.SpreadsheetProcessing
+
+<DemoPageMainLayout Loading="@loading"
+                    EditFormContext="@editFormContext"
+                    AdvancedOptionsZoneCaption="Image Export Settings">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@model.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.SpreadsheetSample" />
+    </DocumentZoneLayoutItem>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Image Resolution (DPI)" ColSpanMd="4">
+            <DxComboBox Data="@model.PredefinedResolutions" @bind-Value="@model.Resolution" AllowUserInput="true" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Export Mode" ColSpanMd="4">
+            <DxComboBox Data="@model.ExportModes" @bind-Value="model.ExportMode"
+                        TextFieldName="Text" ValueFieldName="Value"
+                        Placeholder="Select export mode" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" ColSpanMd="4">
+            <DxCheckBox @bind-Checked="model.ExportGridlines">
+                Export Grid Lines
+            </DxCheckBox>
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Convert to "
+                                Data="@model.ImageFormats"
+                                @bind-Value="model.ImageFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        // Add form parameters from model
+        content.Add(new StringContent(model.ImageFormat), "ImageFormat");
+        content.Add(new StringContent(model.Resolution.ToString()), "Resolution");
+        content.Add(new StringContent(model.ExportMode.ToString()), "ExportMode");
+        content.Add(new StringContent(model.ExportGridlines.ToString()), "ExportGridlines");
+
+        var apiUrl = "api/spreadsheetprocessing/excel-to-image/convert";
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+        request.Content = content;
+
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.ImageFormat);
+    }
+}
+
+

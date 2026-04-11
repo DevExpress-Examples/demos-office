@@ -1,0 +1,35 @@
+@page "/SpreadsheetProcessing/DocumentConversion/ExcelToExcel"
+@using BlazorDemo.OfficeFileApi.Models.Spreadsheet.DocumentConversion
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.SpreadsheetProcessing
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@conversionModel.AllowedFileExtensions"
+                      DefaultDocument="@DemoDocumentPaths.SpreadsheetSample" />
+    </DocumentZoneLayoutItem>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Convert Document to "
+                                Data="@conversionModel.OutputFormats"
+                                @bind-Value="conversionModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessConversion)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    ExcelToExcelConversionModel conversionModel = new ExcelToExcelConversionModel();
+
+    async Task ProcessConversion() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, conversionModel.OutputFormat, conversionModel.OutputName);
+
+        var apiUrl = "api/spreadsheetprocessing/excel-to-excel/convert";
+        await ExecuteDownloadOperation(apiUrl, content, conversionModel.OutputName, conversionModel.OutputFormat);
+    }
+}
+
+

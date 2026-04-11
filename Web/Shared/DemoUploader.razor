@@ -1,0 +1,114 @@
+﻿@using BlazorDemo.OfficeFileApi.Models
+
+@* Generate unique IDs per component instance so multiple uploaders do not share the same external selectors *@
+<div class="d-flex align-items-center">
+    <span class="info-text">@Title</span>
+    <div class="right-no-wrap">
+        <DxDropDownButton RenderStyle="ButtonRenderStyle.Secondary" CssClass="w-100" Text="@GetText(UseDefaultFile)">
+            <Items>
+                <DxDropDownButtonItem Text="@GetText(useDefaultFile: true)" Click="() => UseDefaultFile = true" />
+                <DxDropDownButtonItem Text="@GetText(useDefaultFile: false)" Click="() => UseDefaultFile = false" />
+            </Items>
+        </DxDropDownButton>
+    </div>
+</div>
+
+
+<DxFormLayout CssClass="mt-14">
+    @if (UseDefaultFile && DefaultDocuments?.Count > 0) {
+        <DxFormLayoutGroup Decoration="FormLayoutGroupDecoration.None">
+            <DxFormLayoutItem ColSpanMd="12">
+                <DefaultFileBase @ref="defaultFileRef" DefaultDocuments="@DefaultDocuments" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    } else {
+        <DxFormLayoutGroup HeaderCssClass="p-0">
+            <DxFormLayoutItem ColSpanMd="12">
+                <div class="upload-container">
+                    <DxFileInput @ref="fileInputRef"
+                                 AllowedFileExtensions="@AllowedFileExtensions"
+                                 AcceptedFileTypes="@AllowedFileExtensions"
+                                 SelectButtonText="Upload a File"
+                                 MaxFileSize="@MaxFileSizeBytes"
+                                 FilesUploading="OnFilesUploading"
+                                 SelectedFilesChanged="@SelectedFilesChanged" MaxFileCount="@MaxFileCount">
+                    </DxFileInput>
+                </div>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanMd="12" CssClass="m-0 p-0">
+                <div class="upload-validation-text info-text d-flex justify-content-center align-items-center">
+                    @if (MaxFileCount > 1) {
+                        <text>You can upload up to @MaxFileCount files, each up to 5 MB.</text>
+                    } else {
+                        <text>File size limit: 5 MB.</text>
+                    }
+                </div>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    }
+</DxFormLayout>
+
+    @code {
+    // Parameters
+    [Parameter] public List<string> AllowedFileExtensions { get; set; } = new();
+    [Parameter] public EventCallback OnFileUploaded { get; set; }
+    [Parameter] public string IdSuffix { get; set; }
+    [Parameter] public int MaxFileCount { get; set; } = 1;
+    [Parameter] public string DefaultDocument { get; set; }
+    [Parameter] public List<string> DefaultDocuments { get; set; } = new List<string>();
+    [Parameter] public string Title { get; set; } = "Sample document";
+    // Public data
+    public byte[] FileBytes => UseDefaultFile ? DefaultFileInfoList.FirstOrDefault()?.Content : FileBytesList.FirstOrDefault().Value;
+    public Dictionary<string, byte[]> FileBytesList { get; private set; } = new();
+    public List<DefaultFileInfo> DefaultFileInfoList = new List<DefaultFileInfo>();
+    public bool UseDefaultFile { get; set; } = true;
+
+    // Internal state
+    DefaultFileBase defaultFileRef;
+    string uniqueId = Guid.NewGuid().ToString("N");
+    DxFileInput fileInputRef;
+
+    string SelectButtonId => $"overviewDemoSelectButton_{uniqueId}";
+    string SelectButtonSelector => $"#{SelectButtonId}";
+    int MaxFileSizeBytes => 5 * 1024 * 1024; // 5MB
+
+    protected override void OnInitialized() {
+        if (!string.IsNullOrWhiteSpace(IdSuffix))
+            uniqueId = IdSuffix.Replace(" ", "_");
+        if (DefaultDocuments.Count == 0 && !string.IsNullOrEmpty(DefaultDocument))
+            DefaultDocuments.Add(DefaultDocument);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender)
+            DefaultFileInfoList = defaultFileRef?.DefaultFileInfoList;
+    }
+
+    string GetText(bool useDefaultFile) {
+        return useDefaultFile ? "Default file" : "Upload a file";
+    }
+
+    protected async Task SelectedFilesChanged(IEnumerable<UploadFileInfo> files) {
+        for (int i = FileBytesList.Count - 1; i >= 0; i--) {
+            var currentFileBytes = FileBytesList.ElementAt(i).Key;
+            if (files.All(f => f.Guid != currentFileBytes)) {
+                FileBytesList.Remove(currentFileBytes);
+            }
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected async Task OnFilesUploading(FilesUploadingEventArgs args) {
+        foreach (var f in args.Files) {
+            using var readStream = f.OpenReadStream(MaxFileSizeBytes);
+            using var ms = new MemoryStream();
+            await readStream.CopyToAsync(ms);
+            FileBytesList.Add(f.Guid, ms.ToArray());
+        }
+
+        await OnFileUploaded.InvokeAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void ShowDialog() => fileInputRef.ShowOpenFileDialog();
+}

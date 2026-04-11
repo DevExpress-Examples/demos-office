@@ -1,0 +1,19 @@
+<div class="code-snippet">
+  <div class="code-snippet-row">
+    <CodeSnippetToolbar CodeId="@codeId" Label="@Label" />
+  </div>
+  <div class="code-snippet-row">
+    <CodeSnippetArea CodeId="@codeId" Label="@Label" Code="@Code" Language="@Language" />
+  </div>
+</div>
+
+@code {
+  [Parameter, EditorRequired]
+  public string Label { get; set; }
+  [Parameter, EditorRequired]
+  public string Code { get; set; }
+  [Parameter]
+  public string Language { get; set; } = "language-csharp";
+
+  string codeId = $"code-{Guid.NewGuid():N}";
+}

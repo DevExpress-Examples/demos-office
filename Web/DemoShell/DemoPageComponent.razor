@@ -1,0 +1,39 @@
+﻿@implements IDisposable
+@inject DemoConfiguration Configuration
+@inject DemoThemeService Themes
+@inject NavigationManager NavigationManager
+
+<div class="demo-page">
+    <div class="@DemoRenderUtils.CombineCssClasses(GetPageContentClassNames())">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    public bool HasPageNavigation { get; set; }
+
+    protected override void OnInitialized() {
+        NavigationManager.LocationChanged += OnLocationChanged;
+        UpdateHasPageNavigation(NavigationManager.Uri);
+    }
+    void OnLocationChanged(object sender, LocationChangedEventArgs args) {
+        UpdateHasPageNavigation(args.Location);
+        InvokeAsync(StateHasChanged);
+    }
+    void UpdateHasPageNavigation(string currentUri) {
+        var demoPage = Configuration.GetDemoPageByUrl(NavigationManager, currentUri) as DemoPage;
+        HasPageNavigation = demoPage != null && demoPage.PageSections != null && demoPage.PageSections.Count() > 1;
+    }
+    public void Dispose() {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+    IEnumerable<string> GetPageContentClassNames() {
+        yield return "demo-page-content";
+        if(!HasPageNavigation)
+            yield return "demo-page-no-navigation";
+        if(Configuration.ShowOnlyReporting)
+            yield return "mw-100 me-0";
+    }
+}

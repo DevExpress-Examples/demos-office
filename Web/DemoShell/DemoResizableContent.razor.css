@@ -1,0 +1,59 @@
+.demo-resizable-container {
+    width: 100%;
+    justify-self: flex-start
+}
+
+.demo-resizable-card {
+    position: relative !important;
+    display: block;
+    width: 100%;
+    justify-self: flex-start;
+}
+
+    .demo-resizable-card > .demo-resizable-content {
+        margin-right: 1rem;
+    }
+
+::deep .demo-img-resize {
+    background-color: currentColor;
+    -webkit-mask-image: url("images/mobile-view/resize.svg");
+    mask-image: url("images/mobile-view/resize.svg");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    width: 6px;
+    height: 15px;
+}
+
+.demo-resize-handler {
+    position: absolute;
+    overflow: hidden;
+    width: 15px;
+    height: 100%;
+    cursor: w-resize;
+    right: 0;
+    top: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: inherit;
+    border-width: 0 0 0 1px;
+    border-radius: inherit;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 400px) {
+    .demo-resizable-card {
+        min-width: 0px !important;
+    }
+
+    .demo-resize-handler {
+        display: none;
+    }
+
+    .demo-resizable-card > .demo-resizable-content {
+        margin-right: initial;
+    }
+}

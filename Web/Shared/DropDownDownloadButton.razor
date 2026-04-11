@@ -1,0 +1,35 @@
+﻿@using BlazorDemo.OfficeFileApi.Models
+@inject IJSRuntime JS
+@typeparam TItem
+
+@inherits DownloadButton
+
+<DxSplitButton Text="@(Text + " " + GetValueAsString(Value))"
+               Enabled="@Enabled"
+               RenderStyle="ButtonRenderStyle.Primary" Click="() => OnItemClick(null)">
+    <Items>
+        @foreach (var item in Data) {
+            <DxDropDownButtonItem Text="@item.Text"
+                                  Click="() => OnItemClick(item.Value)" />
+        }
+    </Items>
+</DxSplitButton>
+
+@code {
+    [Parameter]
+    public IEnumerable<FormatInfo> Data { get; set; } = new List<FormatInfo>();
+    [Parameter]
+    public TItem Value { get; set; }
+    [Parameter]
+    public EventCallback<TItem> ValueChanged { get; set; }
+    [Parameter]
+    public Func<TItem, string> GetValueAsString { get; set; } = v => v.ToString().ToUpperInvariant();
+
+    void OnItemClick(object value = null) {
+        if (value != null) {
+            Value = (TItem)value;
+            ValueChanged.InvokeAsync(Value);
+        }
+        Click.InvokeAsync();
+    }
+}

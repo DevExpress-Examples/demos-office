@@ -1,0 +1,44 @@
+@page "/WordProcessing/MailMergeFields/MailMerge"
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.MailMergeFields
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.WordProcessing
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DefaultFile @ref="defaultFileRef" DefaultDocuments="new List<string>() { DemoDocumentPaths.WordMailMergeLetterTemplateFile }" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Employee" ColSpanMd="4">
+            <DxComboBox Data="@mailMergeModel.Employees" @bind-Value="mailMergeModel.EmployeeId"
+                        ValueFieldName="@nameof(Employee.EmployeeID)" TextFieldName="@nameof(Employee.FullName)" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Customer" ColSpanMd="4">
+            <DxComboBox Data="@mailMergeModel.Customers" @bind-Value="mailMergeModel.CustomerId"
+                        ValueFieldName="@nameof(Customer.CustomerID)" TextFieldName="@nameof(Customer.ContactName)" />
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Mail Merge and Save to "
+                                Data="@mailMergeModel.OutputFormats"
+                                @bind-Value="mailMergeModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessDownload)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    DefaultFile defaultFileRef;
+    // Model instance kept client-side only
+    WordMailMergeModel mailMergeModel = new WordMailMergeModel();
+
+    async Task ProcessDownload() {
+        using var content = CreateMultipartContent(defaultFileRef?.DefaultFileInfoList.FirstOrDefault()?.Content);
+        content.Add(new StringContent(mailMergeModel.EmployeeId.ToString() ?? string.Empty), "EmployeeId");
+        content.Add(new StringContent(mailMergeModel.CustomerId ?? string.Empty), "CustomerId");
+        AddCommonParameters(content, mailMergeModel.OutputFormat, mailMergeModel.OutputName);
+        var apiUrl = "api/wordprocessing/mail-merge/process";
+        await ExecuteDownloadOperation(apiUrl, content, mailMergeModel.OutputName, mailMergeModel.OutputFormat);
+    }
+}

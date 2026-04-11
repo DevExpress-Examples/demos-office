@@ -1,0 +1,49 @@
+@page "/Presentation/DocumentElements/Notes"
+@using BlazorDemo.OfficeFileApi.Models.PowerPointPresentation.DocumentElements
+@inherits DemoPageComponentWithValidation<PresentationNotesModel>
+
+@namespace BlazorDemo.OfficeFileApi.Pages.Presentation
+
+<DemoPageMainLayout Loading="@loading"
+                    EditFormContext="@editFormContext">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@(new List<string> { ".pptx" })"
+                      DefaultDocument="@DemoDocumentPaths.PresentationSample" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Action" ColSpanMd="4">
+            <DxComboBox Data="@model.ActionTypes" @bind-Value="model.ActionType"
+                        ValueFieldName="Value" TextFieldName="Text" />
+        </DxFormLayoutItem>
+        @if (model.ActionType != NotesActionType.ClearAllNotes) {
+            <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Note Text" ColSpanMd="4">
+                <DxTextBox @bind-Text="model.NoteText" NullText="Enter note text" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Slide Number" ColSpanMd="4">
+                <DxSpinEdit @bind-Value="model.SlideIndex" MinValue="1" MaxValue="100" Increment="1" />
+            </DxFormLayoutItem>
+        }
+    </MainOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Modify Notes and Save as "
+                                Data="@model.OutputFormats"
+                                @bind-Value="model.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessNotes)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+@code {
+    async Task ProcessNotes() {
+        using var content = CreateMultipartContent();
+        AddCommonParameters(content, model.OutputFormat, model.OutputName);
+
+        content.Add(new StringContent(model.ActionType.ToString()), "ActionType");
+        content.Add(new StringContent(model.NoteText ?? string.Empty), "NoteText");
+        content.Add(new StringContent(model.SlideIndex.ToString()), "SlideIndex");
+
+        var apiUrl = "api/presentation/notes/process";
+        await ExecuteDownloadOperation(apiUrl, content, model.OutputName, model.OutputFormat.ToString());
+    }
+}

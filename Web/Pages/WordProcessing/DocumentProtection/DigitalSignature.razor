@@ -1,0 +1,82 @@
+@page "/WordProcessing/DocumentProtection/DigitalSignature"
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.DocumentProtection
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.WordProcessing
+
+<DemoPageMainLayout Loading="@loading" AdvancedOptionsZoneCaption="Signature Settings">
+    <DocumentZoneLayoutItem>
+        <DefaultFile @ref="defaultFileRef" DefaultDocuments="new List<string>() { DemoDocumentPaths.WordDocumentProtectionDefaultFile }" />
+    </DocumentZoneLayoutItem>
+    <MainOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Hash Algorithm" ColSpanMd="4">
+            <DxComboBox @bind-Value="@protectionModel.HashAlgorithm"
+                        TextFieldName="Text" ValueFieldName="Value"
+                        Data="@protectionModel.HashAlgorithms" Placeholder="Select hash algorithm" />
+        </DxFormLayoutItem>
+    </MainOptionsZoneLayoutGroup>
+    <AdvancedOptionsZoneLayoutGroup>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Reason" ColSpanMd="4">
+            <DxComboBox @bind-Value="@protectionModel.Reason"
+                        TextFieldName="Text" ValueFieldName="Value"
+                        Data="@protectionModel.Reasons" Placeholder="Select signature reason" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Role" ColSpanMd="4">
+            <DxTextBox @bind-Text="@protectionModel.Role" Placeholder="Enter role" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Comments" ColSpanMd="4">
+            <DxTextBox @bind-Text="@protectionModel.Comments" Placeholder="Enter comments" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Address Line 1" ColSpanMd="4">
+            <DxTextBox @bind-Text="@protectionModel.Address1" Placeholder="Enter address 1" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Address Line 2" ColSpanMd="4">
+            <DxTextBox @bind-Text="@protectionModel.Address2" Placeholder="Enter address 2" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="City" ColSpanMd="4">
+            <DxTextBox @bind-Text="@protectionModel.City" Placeholder="Enter city" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="State" ColSpanMd="4">
+            <DxTextBox @bind-Text="@protectionModel.State" Placeholder="Enter state" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Zip/Postal Code" ColSpanMd="4">
+            <DxTextBox @bind-Text="@protectionModel.PostalCode" Placeholder="Enter postal code" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem CaptionPosition="CaptionPosition.Vertical" Caption="Country" ColSpanMd="4">
+            <DxTextBox @bind-Text="@protectionModel.Country" Placeholder="Enter country" />
+        </DxFormLayoutItem>
+    </AdvancedOptionsZoneLayoutGroup>
+    <ButtonZoneLayoutItem>
+        <DownloadButton @ref="downloadButton"
+                        Text="Sign Word Document"
+                        Click="() => ProcessDownloadWithLoading(ProcessDownload)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+
+@code {
+    DefaultFile defaultFileRef;
+    WordDigitalSignatureModel protectionModel = new WordDigitalSignatureModel();
+
+    async Task ProcessDownload() {
+        using var content = CreateMultipartContent(defaultFileRef?.DefaultFileInfoList.FirstOrDefault()?.Content);
+        AddCommonParameters(content, protectionModel.OutputFormat, protectionModel.OutputName);
+
+        content.Add(new StringContent(protectionModel.Address1 ?? string.Empty), "Address1");
+        content.Add(new StringContent(protectionModel.Address2 ?? string.Empty), "Address2");
+        content.Add(new StringContent(protectionModel.City ?? string.Empty), "City");
+        content.Add(new StringContent(protectionModel.Comments ?? string.Empty), "Comments");
+        content.Add(new StringContent(protectionModel.Country ?? string.Empty), "Country");
+        content.Add(new StringContent(protectionModel.HashAlgorithm.ToString()), "HashAlgorithm");
+        content.Add(new StringContent(protectionModel.PostalCode ?? string.Empty), "PostalCode");
+        content.Add(new StringContent(protectionModel.Reason.ToString()), "Reason");
+        content.Add(new StringContent(protectionModel.Role ?? string.Empty), "Role");
+        content.Add(new StringContent(protectionModel.State ?? string.Empty), "State");
+        content.Add(new StringContent(protectionModel.TsaServer), "TsaServer");
+
+        var apiUrl = "api/wordprocessing/digital-signature/sign";
+        await ExecuteDownloadOperation(apiUrl, content, protectionModel.OutputName, protectionModel.OutputFormat);
+    }
+}
+
+

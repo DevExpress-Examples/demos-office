@@ -1,0 +1,37 @@
+@page "/WordProcessing/MergeSplit/Merge"
+@using BlazorDemo.OfficeFileApi.Models.WordProcessing.MergeSplit
+@inherits DemoPageComponentBase
+
+@namespace BlazorDemo.OfficeFileApi.Pages.WordProcessing
+
+<DemoPageMainLayout Loading="@loading">
+    <DocumentZoneLayoutItem>
+        <DemoUploader @ref="fileUploadRef"
+                      AllowedFileExtensions="@mergeModel.AllowedFileExtensions"
+                      DefaultDocuments="new List<string>() { DemoDocumentPaths.WordSample, DemoDocumentPaths.WordDocumentProtectionDefaultFile }"
+                      MaxFileCount="5" />
+    </DocumentZoneLayoutItem>
+    <ButtonZoneLayoutItem>
+        <DropDownDownloadButton @ref="downloadButton"
+                                Text="Merge and Save as "
+                                Data="@mergeModel.OutputFormats"
+                                @bind-Value="mergeModel.OutputFormat"
+                                Click="() => ProcessDownloadWithLoading(ProcessDownload)" />
+    </ButtonZoneLayoutItem>
+</DemoPageMainLayout>
+
+@code {
+    WordMergeDocumentModel mergeModel = new WordMergeDocumentModel();
+
+    async Task ProcessDownload() {
+        using var content = new MultipartFormDataContent();
+        AddCommonParameters(content, mergeModel.OutputFormat, mergeModel.OutputName);
+
+        AddDocumentsContent(content);
+
+        var apiUrl = "api/wordprocessing/word-merge/process";
+        await ExecuteDownloadOperation(apiUrl, content, mergeModel.OutputName, mergeModel.OutputFormat);
+    }
+}
+
+

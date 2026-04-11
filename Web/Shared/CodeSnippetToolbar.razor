@@ -1,0 +1,42 @@
+@using BlazorDemo.OfficeFileApi.Utils
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<div class="code-snippet-toolbar">
+  <div class="code-snippet-languages">
+    <ul>
+      <li class="code-snippet-label bg-light text-dark d-flex justify-content-center align-items-center">
+        @Label
+      </li>
+    </ul>
+  </div>
+
+  <button class="copy-code-btn" data-clipboard-target="@($"#{CodeId}")">
+    <span class="icon copy-icon"></span><span>Copy</span>
+  </button>
+</div>
+
+@code {
+  [Parameter, EditorRequired]
+  public string Label { get; set; } = default!;
+  [Parameter, EditorRequired]
+  public string CodeId { get; set; } = default!;
+
+  IJSObjectReference module;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender)
+    {
+      module = await JS.InvokeAsync<IJSObjectReference>(
+          "import", "./Shared/CodeSnippetToolbar.razor.js");
+
+      await module.InvokeVoidAsync("initCopyButtonClipboard");
+    }
+  }
+
+  public ValueTask DisposeAsync()
+  {
+    return JsModuleHelper.SafeDisposeAsync(module);
+  }
+}

@@ -1,0 +1,310 @@
+﻿@inject DemoConfiguration Configuration
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+@if(PreventRender) {
+    return;
+}
+
+<DemoScriptLoader @ref=@clipboradJsRef Src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" />
+<DemoScriptLoader @ref=@sectionHelper Src="./lib/page-section-helper.js" />
+
+@{
+    RenderFragment<DemoPageSectionParameters> ComponentArea = parameters =>
+    @<div class="demo-page-section-component-area">
+        @if(IsComponentAreaVisible) {
+            @if(OptionsContent != null) {
+                <div class=@GetOptionsContentCssClass()>
+                    @OptionsContent
+                </div>
+            }
+            <div @attributes="GetComponentContainerAttributes()">
+                @DemoChildContent
+                @if(ChildContentWithParameters != null) {
+                    @ChildContentWithParameters(parameters)
+                }
+            </div>
+        }
+    </div>;
+}
+
+<div @key="@DemoItem!.Id" id="@("section-" + DemoItem!.Id)" class="demo-page-section @(!ShowCode ? "no-code" : "") @(ShowHorizontalScrollBar ? "h-scroll" : "")">
+    <div class="demo-page-section-title">
+        <h2 id="@DemoItem!.Id">
+            <a class="demo-anchor"
+               href="@DemoItem.GetUrl()"
+               aria-labelledby="@DemoItem.Id" />
+               @(!string.IsNullOrEmpty(DemoItem.TitleOnPage) ? DemoItem.TitleOnPage : DemoItem.Title)
+        </h2>
+    </div>
+    @{
+        var statusMessage = DemoItem.GetStatusMessageMarkdown();
+    }
+    @if(!string.IsNullOrEmpty(statusMessage)) {
+        <div class="demo-page-section-status-text">
+            @(new MarkupString(Markdig.Markdown.ToHtml(statusMessage)))
+        </div>
+    }
+    @if (ShowDescription) {
+        <div class="demo-page-section-description">
+            @(new MarkupString(DescriptionsContent[Id!]))
+        </div>
+    }
+    @if(ShowContent) {
+        var parameters = new DemoPageSectionParameters() { SizeMode = SizeMode, KeyboardNavigationEnabled = KeyboardNavigationEnabled };
+        <CascadingValue Name="VisualTestsEnabled" Value="VisualTestsEnabled" IsFixed="true">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active">
+                                Example
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    @ComponentArea.Invoke(parameters)
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active">
+                                View Source
+                            </a>
+                        </li>
+                        <li class="demo-page-section-toolbar">
+                            @if (!string.IsNullOrEmpty(DemoItem.DocUrl) && IsComponentAreaVisible) {
+                                <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+                                    <Items>
+                                        <DxToolbarItem Text="Docs"
+                                                       NavigateUrl="@(DemoConfiguration.DocBaseUrl + DemoItem.DocUrl)"
+                                                       Target="_blank"
+                                                       Alignment="ToolbarItemAlignment.Right"
+                                                       IconCssClass="icon icon-doc"
+                                                       Visible="!string.IsNullOrEmpty(DemoItem.DocUrl)"></DxToolbarItem>
+                                    </Items>
+                                </DxToolbar>
+                            }
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="demo-page-section-code-area">
+                        <PageSectionCodeSnippetTabbed>
+                            @foreach(var key in CodeFilesContent[Id!].Keys) {
+                                <PageSectionCodeSnippetTabPage Text="@key" Language="@GetTabPageLanguage(key)">
+                                    @CodeFilesContent[Id!][key]
+                                </PageSectionCodeSnippetTabPage>
+                            }
+                        </PageSectionCodeSnippetTabbed>
+                    </div>
+                </div>
+            </div>
+        </CascadingValue>
+    }
+</div>
+
+@code {
+    DemoScriptLoader clipboradJsRef;
+    DemoScriptLoader sectionHelper;
+    string themeName;
+    int activeTabPageIndex = 0;
+
+    public DemoItem DemoItem { get; set; }
+
+    [Parameter]
+    public RenderFragment<DemoPageSectionParameters> ChildContentWithParameters { get; set; }
+    [Parameter]
+    [Obsolete(message: "Instead, use DemoChildContent if needed. However, if you can omit this tag, you can still do so.")]
+    public RenderFragment ChildContent { get => DemoChildContent; set => DemoChildContent = value; }
+    [Parameter]
+    public RenderFragment DemoChildContent { get; set; }
+    [Parameter]
+    public RenderFragment OptionsContent { get; set; }
+    [Parameter]
+    public bool HasOptionsGroups { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public bool ShowContent { get; set; } = true;
+    [Parameter]
+    public bool ShowCode { get; set; } = true;
+    [Parameter]
+    public bool ShowDescription { get; set; } = true;
+    [Parameter]
+    public bool ShowHorizontalScrollBar { get; set; } = false;
+    [Parameter]
+    public bool ShowSizeMode { get; set; }
+    [Parameter]
+    public bool ShowKeyboardNavigationSwitcher { get; set; }
+
+    [Parameter]
+    public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Center;
+    [Parameter]
+    public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Center;
+
+    [Parameter]
+    public int? MinHeight { get; set; }
+
+    [Parameter]
+    public SizeMode SizeMode { get; set; } = SizeMode.Medium;
+    [Parameter]
+    public bool KeyboardNavigationEnabled { get; set; }
+
+    [CascadingParameter(Name = "ThemeName")]
+    string ThemeName {
+        get => themeName;
+        set {
+            if (value != themeName) {
+                themeName = value;
+                IsComponentAreaVisible = false;
+                UpdateTabPagesVisibility();
+            }
+        }
+    }
+    void OnSizeModeChanged(ToolbarItemClickEventArgs e) {
+        switch(e.ItemName) {
+            case "Small":
+                SizeMode = SizeMode.Small;
+                break;
+            case "Medium":
+                SizeMode = SizeMode.Medium;
+                break;
+            case "Large":
+                SizeMode = SizeMode.Large;
+                break;
+        }
+    }
+
+    int ActiveTabPageIndex {
+        get => activeTabPageIndex;
+        set {
+            activeTabPageIndex = value;
+            UpdateTabPagesVisibility();
+            InvokeAsync(StateHasChanged);
+        }
+    }
+    bool VisualTestsEnabled { get; set; }
+    bool IsComponentAreaVisible { get; set; }
+    bool IsCodeVisible { get; set; }
+    bool PreventRender { get; set; }
+    void UpdateTabPagesVisibility() {
+        IsComponentAreaVisible = IsComponentAreaVisible || ActiveTabPageIndex == 0;
+        IsCodeVisible = IsCodeVisible || ActiveTabPageIndex == 1;
+    }
+
+    static Dictionary<string, Dictionary<string, MarkupString>> CodeFilesContent { get; set; } = new Dictionary<string, Dictionary<string, MarkupString>>();
+    static Dictionary<string, string> DescriptionsContent { get; set; } = new Dictionary<string, string>();
+
+    string GetTabCssClass(bool isActive) {
+        return string.Join(" ", "nav-link", isActive ? "active" : "").Trim();
+    }
+    string GetOptionsContentCssClass() {
+        List<string> cssClasses = new List<string>() { "options-container" };
+        if(HasOptionsGroups)
+            cssClasses.Add("px-0");
+        return string.Join(' ', cssClasses);
+    }
+    IReadOnlyDictionary<string, object> GetComponentContainerAttributes() {
+        var result = new Dictionary<string, object>();
+        var className = GetComponentContainerCssClass();
+        if(!string.IsNullOrEmpty(className))
+            result.Add("class", className);
+        var style = GetComponentContainerStyle();
+        if(!string.IsNullOrEmpty(style))
+            result.Add("style", style);
+        return result;
+    }
+    string GetComponentContainerCssClass() {
+        List<string> cssClasses = new List<string>();
+        cssClasses.Add("component-container");
+        if(VerticalAlignment == VerticalAlignment.Top)
+            cssClasses.Add("justify-content-start");
+        else if(VerticalAlignment == VerticalAlignment.Bottom)
+            cssClasses.Add("justify-content-end");
+        if(HorizontalAlignment == HorizontalAlignment.Left)
+            cssClasses.Add("align-items-start");
+        else if(HorizontalAlignment == HorizontalAlignment.Right)
+            cssClasses.Add("align-items-end");
+        return string.Join(" ", cssClasses);
+    }
+    string GetComponentContainerStyle() {
+        var cssRules = new List<string>();
+        if(MinHeight != null)
+            cssRules.Add($"min-height: {MinHeight.Value}px");
+        return string.Join("; ", cssRules);
+    }
+
+    string GetTabPageLanguage(string key) {
+        key = key.ToLower().Split('.').Last();
+        switch(key) {
+            case "razor":
+            case "cshtml":
+                return "cshtml-razor";
+            case "cs":
+                return "csharp";
+            case "css":
+                return "css";
+            default:
+                // TODO: Unknown language warning
+                return "";
+        }
+    }
+    void OnTabClick(int tabPageIndex) {
+        if(tabPageIndex != ActiveTabPageIndex)
+            ActiveTabPageIndex = tabPageIndex;
+    }
+
+    protected override void OnInitialized() {
+        string subpage = NavigationManager.Uri.Replace(NavigationManager.BaseUri, null);
+        Id = subpage.Replace("/", "-");
+        PreventRender = DemoRenderUtils.PreventRenderDemoSection(NavigationManager.Uri, Id!);
+        if(PreventRender)
+            return;
+
+#if VISUALTESTS
+        VisualTestsEnabled = true;
+#endif
+
+        base.OnInitialized();
+        UpdateTabPagesVisibility();
+    }
+
+    protected override void OnParametersSet() {
+        if(PreventRender)
+            return;
+
+        DemoItem = Configuration.GetDemoItem(Id!);
+        if(DemoItem == null)
+            throw new ArgumentException($"It's impossible to find a demo page or a demo page section by the '{Id}' id. Check your 'wwwroot\\demo-metadata.json' file.");
+
+        if(!CodeFilesContent.ContainsKey(Id!)) { //Id = DocumentConversion-WordRtfDocumentConversion
+            CodeFilesContent[Id!] = new Dictionary<string, MarkupString>();
+            var codeFiles = Configuration.GetDemoCodeFiles(DemoItem);
+            foreach(var key in codeFiles.Keys) {
+                string codeFileContent = codeFiles[key];
+                if(string.IsNullOrEmpty(codeFileContent))
+                    CodeFilesContent[Id!].Add(key, (MarkupString)"Source file is unavailable");
+                else
+                    CodeFilesContent[Id!].Add(key, (MarkupString)DemoCodeProcessor.ProcessCode(codeFileContent));
+            }
+        }
+        if(!DescriptionsContent.ContainsKey(Id!)) {
+            string description = Configuration.GetDemoDescription(DemoItem);
+            if(string.IsNullOrEmpty(description))
+                DescriptionsContent[Id!] = "Description is unavailable";
+            else
+                DescriptionsContent[Id!] = Markdig.Markdown.ToHtml(description);
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(PreventRender)
+            return;
+        await sectionHelper!.InvokeVoidAsync("DemoPageSectionHelper.init");
+    }
+}
