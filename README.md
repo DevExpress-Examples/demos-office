@@ -15,7 +15,7 @@ This repository contains demos for DevExpress Blazor components and console appl
 
 ## Blazor Demos
 
-The Blazor demos are located in the `Blazor` folder.  Refer to the `Blazor/README.md` file for more information on how to run the Blazor demos.
+The Blazor demos are located in the `Blazor` folder.  Refer to the following file for more information on how to run the Blazor demos: [README](./Web/README.md)
 
 ## Console Demos
 
