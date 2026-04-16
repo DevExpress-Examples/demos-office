@@ -70,16 +70,6 @@
 	  <Folder Include="wwwroot\" />
 	</ItemGroup>
 
-
-	<Target Name="LinkStatic" BeforeTargets="PreBuildEvent;BeforeBuild;PrepareForBuild">
-		<Message Text="Creating links for static assets" />
-		<Exec Command="if not exist &quot;wwwroot/_content&quot; mkdir &quot;wwwroot/_content&quot;" />
-		<Exec Command="if not exist &quot;wwwroot/_content/DevExpress.Blazor&quot; mklink /J &quot;wwwroot/_content/DevExpress.Blazor&quot; &quot;../../Blazor/DevExpress.Blazor/wwwroot&quot;" />
-		<Exec Command="if not exist &quot;wwwroot/_content/DevExpress.Blazor.Themes&quot; mklink /J &quot;wwwroot/_content/DevExpress.Blazor.Themes&quot; &quot;../../Blazor/DevExpress.Blazor.Themes/wwwroot&quot;" />
-		<Exec Command="if not exist &quot;wwwroot/_content/DevExpress.Blazor.Themes.Fluent&quot; mklink /J &quot;wwwroot/_content/DevExpress.Blazor.Themes.Fluent&quot; &quot;../../Blazor/DevExpress.Blazor.Themes.Fluent/wwwroot&quot;" />
-		<Exec Command="if not exist &quot;wwwroot/_content/DevExpress.Blazor.Resources&quot; mklink /J &quot;wwwroot/_content/DevExpress.Blazor.Resources&quot; &quot;../../Blazor/DevExpress.Blazor.Resources/wwwroot&quot;" />
-	</Target>
-
 	<Target Name="SourceCode" BeforeTargets="PreBuildEvent">
 		<ItemGroup>
 			<Message Text="Embedding source code" />

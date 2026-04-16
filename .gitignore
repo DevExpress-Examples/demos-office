@@ -1,0 +1,6 @@
+﻿/Console/.vs
+/Console/**/bin
+/Console/**/obj
+/Web/.vs
+/Web/bin
+/Web/obj
