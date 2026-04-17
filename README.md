@@ -1,29 +1,29 @@
 # Office File API Demos
 
-The [DevExpress Office File API](https://www.devexpress.com/products/net/office-file-api/) bundle is a set of non-visual document processing components. These components can help you create, load, modify, and save Microsoft Word, Excel, PowerPoint, and PDF files in .NET applications. 
+[DevExpress Office File API](https://www.devexpress.com/products/net/office-file-api/) includes a set of non-visual document processing components. These components help you generate, read, modify, and save Microsoft Word, Excel, PowerPoint, and PDF files in .NET applications.
 
 > Office, Excel, Word, PowerPoint are trademarks or registered trademarks of Microsoft Corporation.
 
-The Office File API bundle includes the following components:
+DevExpress Office File API includes the following components:
 
 - [Word Processing Document API](https://www.devexpress.com/products/net/office-file-api/word/)
 - [Spreadsheet Document API](https://www.devexpress.com/products/net/office-file-api/spreadsheet/)
 - [Presentation Document API](https://www.devexpress.com/products/net/office-file-api/powerpoint-presentation-api/)
 - [PDF Document API](https://www.devexpress.com/products/net/office-file-api/pdf/)
 
-This repository contains demos for DevExpress Blazor components and console applications.
+This repository contains demos that integrate Office File API components into Blazor and console applications.
 
 ## Blazor Demos
 
-The Blazor demos are located in the `Blazor` folder.  Refer to the following file for more information on how to run the Blazor demos: [README](./Web/README.md)
+The Blazor demos are located in the `Web` folder.  For startup instructions, refer to [Web/README](./Web/README.md)
 
 ## Console Demos
 
-The console demos are located in the `Console` folder. Refer to the `Console/README.md` file for more information on how to run the console demos.
+Console demos are located in the `Console` folder. For startup instructions, refer to [Console/README](./Console/README.md).
 
 ## Get Started
 
-The following help topics describe how to start using Office File API components:
+The following help topics describe how to start using DevExpress Office File API components:
 
 * [Prerequisites](https://docs.devexpress.com/OfficeFileAPI/405462/installation-guide/prerequisites)
 * [Install NuGet packages](https://docs.devexpress.com/OfficeFileAPI/400744/installation-guide/install-nuget-packages)
@@ -39,4 +39,4 @@ You can find more information in our [online Office File API documentation](http
 
 ## Support and Feedback
 
-In our [Support Center](https://supportcenter.devexpress.com/ticket/create), you can ask questions, share ideas, or report an issue.
+Log in to the [DevExpress Support Center](https://supportcenter.devexpress.com/ticket/create) to ask questions, share ideas, or report issues.
