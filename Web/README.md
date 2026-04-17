@@ -1,17 +1,17 @@
-# DevExpress Office File API Blazor Demos 
+# DevExpress Office File API: Process DOCX Documents, XLSX Spreadsheets, PPTX Presentations, and PDF Files in Blazor Web Apps
 
-The DevExpress Office File API library ships with demo source code. You can find it in the current folder or in the [local installation folder](https://docs.devexpress.com/OfficeFileAPI/15097/demo-application#find-the-source-code).
+The DevExpress Office File API library includes demo source code. You can find it in the current folder or in your [local installation folder](https://docs.devexpress.com/OfficeFileAPI/15097/demo-application#find-the-source-code).
 
-## How to Build Office File API Blazor Demos
+## How to Build Blazor Demos for Office File API
 
-To run demos on your machine locally, you must:
+To run demos on your machine, you must:
 
 1. Download this folder.
 2. Open the following solution file in Visual Studio:
 
     * _Web/Demos.Office.Web.sln_
 
-3. [Obtain the NuGet feed](https://docs.devexpress.com/OfficeFileAPI/400744/installation-guide/install-nuget-packages) and install the following packages:
+3. Install the following NuGet packages (use an [online or local feed](https://docs.devexpress.com/OfficeFileAPI/400744/installation-guide/install-nuget-packages)):
 
    * DevExpress.Blazor
    * DevExpress.Docs.Presentation
