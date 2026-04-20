@@ -1,14 +1,20 @@
 # DevExpress Office File API - Process DOCX Documents, XLSX Spreadsheets, PPTX Presentations, and PDF Files in .NET Console Apps
 
-This folder contains console applications that use the DevExpress Office File API to process Microsoft Word, Excel, PowerPoint documents and PDF files. Included examples implement common scenarios, such as converting documents to different formats, extracting content, or modifying document properties.
+This repository contains console applications that use the DevExpress Office File API to process Microsoft Word, Excel, PowerPoint documents and PDF files. Included examples implement common document management scenarios: 
+
+- Convert a document to another format.
+- Add or extract content.
+- Digitally sign or protect a document.
+- Use Mail Merge for bulk document generation.
+- Modify document properties.
 
 > Office, Excel, Word, PowerPoint are trademarks or registered trademarks of Microsoft Corporation.
 
 ## Process PDF Documents
 
-[DevExpress PDF Document API for .NET](https://www.devexpress.com/products/net/office-file-api/pdf/) allows you to generate, convert, merge, split, edit, password-protect, and digitally sign PDF files.
+[DevExpress PDF Document API for .NET](https://www.devexpress.com/products/net/office-file-api/pdf/) allows you to generate, edit, convert, merge, split, password-protect, and digitally sign PDF files.
 
-For more information, refer to the product documentation: [DevExpress PDF Document API](https://docs.devexpress.com/OfficeFileAPI/16491/pdf-document-api).
+For additional information, refer to product documentation: [DevExpress PDF Document API](https://docs.devexpress.com/OfficeFileAPI/16491/pdf-document-api).
 
 ### Convert a PDF Document to PDF/A
 
@@ -78,7 +84,7 @@ Splits a PDF document into multiple single-page PDF documents.
 
 [DevExpress Word (RTF) Document API](https://www.devexpress.com/products/net/office-file-api/word/) allows you to to create, read, edit, convert, merge, split, password-protect, and digitally sign Microsoft Word documents.
 
-For more information, refer to the product documentation: [Word Processing Document API](https://docs.devexpress.com/OfficeFileAPI/17488/word-processing-document-api).
+For additional information, refer to product documentation: [Word Processing Document API](https://docs.devexpress.com/OfficeFileAPI/17488/word-processing-document-api).
 
 ### Convert Word Document Pages to Images
 
@@ -136,7 +142,7 @@ Generates an order report from a predefined master-detail mail-merge template.
 **Project folder**: *WordProcessing* / *MailMergeFields* / *WordMailMergeRegions*  
 **Files to review**: [Program.cs](./CS/WordProcessing/MailMergeFields/WordMailMergeRegions/Program.cs) | [Program.vb](./VB/WordProcessing/MailMergeFields/WordMailMergeRegions/Program.vb)
 
-### Merge Multiple Documents
+### Merge Word Documents
 
 Merges multiple Word documents (DOCX) into a single document (PDF).
 
@@ -145,7 +151,7 @@ Merges multiple Word documents (DOCX) into a single document (PDF).
 
 ### Split a Word Document
 
-Splits a Word document (DOCX) into multiple documents by page, section, or heading. You can specify the output format (for example, DOCX or PDF).
+Splits a Word document (DOCX) into multiple documents by page, section, or heading. You can specify the output format.
 
 **Project folder**: *WordProcessing* / *MergeSplit* / *Split*  
 **Files to review**: [Program.cs](./CS/WordProcessing/MergeSplit/Split/Program.cs) | [Program.vb](./VB/WordProcessing/MergeSplit/Split/Program.vb)
@@ -155,47 +161,47 @@ Splits a Word document (DOCX) into multiple documents by page, section, or headi
 
 [DevExpress Excel Spreadsheet API for .NET](https://www.devexpress.com/products/net/office-file-api/spreadsheet/) allows you to create, read, write, convert, print, and protect Microsoft Excel files.
 
-For more information, refer to the product documentation: [Spreadsheet Document API](https://docs.devexpress.com/OfficeFileAPI/14912/spreadsheet-document-api).
+For additional information, refer to product documentation: [Spreadsheet Document API](https://docs.devexpress.com/OfficeFileAPI/14912/spreadsheet-document-api).
 
 
 ### Convert an Excel Spreadsheet to Another Format
 
-Converts a spreadsheet (XLSX) to the specified spreadsheet format.
+Converts an XLSX spreadsheet to the specified spreadsheet format.
 
 **Project folder**: *Spreadsheet* / *DocumentConversion* / *ExcelToExcel*  
 **Files to review**: [Program.cs](./CS/Spreadsheet/DocumentConversion/ExcelToExcel/Program.cs) | [Program.vb](./VB/Spreadsheet/DocumentConversion/ExcelToExcel/Program.vb)
 
 ### Convert an Excel Spreadsheet to PDF
 
-Converts a spreadsheet (XLSX) to PDF format.
+Converts an XLSX spreadsheet to PDF format.
 
 **Project folder**: *Spreadsheet* / *DocumentConversion* / *ExcelToPdf*  
 **Files to review**: [Program.cs](./CS/Spreadsheet/DocumentConversion/ExcelToPdf/Program.cs) | [Program.vb](./VB/Spreadsheet/DocumentConversion/ExcelToPdf/Program.vb)
 
 ### Convert an Excel Spreadsheet to Images
 
-Exports spreadsheet (XLSX) worksheets as PNG images.
+Exports XLSX spreadsheet worksheets as PNG images.
 
 **Project folder**: *Spreadsheet* / *DocumentConversion* / *ExcelToImage*  
 **Files to review**: [Program.cs](./CS/Spreadsheet/DocumentConversion/ExcelToImage/Program.cs) | [Program.vb](./VB/Spreadsheet/DocumentConversion/ExcelToImage/Program.vb)
 
 ### Convert an Excel Worksheet to HTML
 
-Converts a worksheet (XLSX) to HTML format.
+Converts an XLSX spreadsheet worksheet to HTML format.
 
 **Project folder**: *Spreadsheet* / *DocumentConversion* / *ExcelToHtml*  
 **Files to review**: [Program.cs](./CS/Spreadsheet/DocumentConversion/ExcelToHtml/Program.cs) | [Program.vb](./VB/Spreadsheet/DocumentConversion/ExcelToHtml/Program.vb)
 
 ### Add a Digital Signature to an Excel Spreadsheet
 
-Digitally signs a spreadsheet (XLSX) with a predefined certificate.
+Digitally signs an XLSX spreadsheet with a predefined certificate.
 
 **Project folder**: *Spreadsheet* / *DocumentProtection* / *ExcelDigitalSignature*  
 **Files to review**: [Program.cs](./CS/Spreadsheet/DocumentProtection/ExcelDigitalSignature/Program.cs) | [Program.vb](./VB/Spreadsheet/DocumentProtection/ExcelDigitalSignature/Program.vb)
 
 ### Encrypt an Excel Spreadsheet
 
-Encrypts and password-protects a spreadsheet (XLSX).
+Encrypts and password-protects an XLSX spreadsheet.
 
 **Project folder**: *Spreadsheet* / *DocumentProtection* / *ExcelEncryptPassword*  
 **Files to review**: [Program.cs](./CS/Spreadsheet/DocumentProtection/ExcelEncryptPassword/Program.cs) | [Program.vb](./VB/Spreadsheet/DocumentProtection/ExcelEncryptPassword/Program.vb)
@@ -216,14 +222,14 @@ Protects a workbook from structural changes (sets a password for add/delete/rena
 
 ### Merge Excel Spreadsheets
 
-Merges multiple spreadsheets (XLSX) into a single spreadsheet (XLSX).
+Merges multiple XLSX spreadsheets into a single spreadsheet.
 
 **Project folder**: *Spreadsheet* / *MergeSplitDocuments* / *ExcelMergeWorkbooks*  
 **Files to review**: [Program.cs](./CS/Spreadsheet/MergeSplitDocuments/ExcelMergeWorkbooks/Program.cs) | [Program.vb](./VB/Spreadsheet/MergeSplitDocuments/ExcelMergeWorkbooks/Program.vb)
 
 ### Split an Excel Spreadsheet
 
-Splits a spreadsheet (XLSX) into multiple single-sheet spreadsheets (XLSX) or PDF documents.
+Splits an XLSX spreadsheet into multiple single-sheet spreadsheets or PDF documents.
 
 **Project folder**: *Spreadsheet* / *MergeSplitDocuments* / *ExcelSplitWorkbooks*  
 **Files to review**: [Program.cs](./CS/Spreadsheet/MergeSplitDocuments/ExcelSplitWorkbooks/Program.cs) | [Program.vb](./VB/Spreadsheet/MergeSplitDocuments/ExcelSplitWorkbooks/Program.vb)
@@ -232,7 +238,7 @@ Splits a spreadsheet (XLSX) into multiple single-sheet spreadsheets (XLSX) or PD
 
 [DevExpress PowerPoint Presentation API for .NET](https://www.devexpress.com/products/net/office-file-api/powerpoint-presentation-api/) allows you to generate, edit, merge, print/export, and digitally sign Microsoft PowerPoint® files.
 
-For more information, refer to the product documentation: [DevExpress Presentation API](https://docs.devexpress.com/OfficeFileAPI/405405/presentation-api/overview).
+For additional information, refer to product documentation: [DevExpress Presentation API](https://docs.devexpress.com/OfficeFileAPI/405405/presentation-api/overview).
 
 ### Convert a Presentation to PDF
 
@@ -285,7 +291,7 @@ Extracts all images from slides and saves them as PNG files.
 
 ### Extract Text from a Presentation
 
-Extracts text from slide shapes, tables, and notes to a TXT file. 
+Extracts text from slide shapes, tables, and notes. Generates a TXT file with extracted content. 
 
 **Project folder**: *PowerPointPresentation* / *SearchExtract* / *PresentationExtractText*  
 **Files to review**: [Program.cs](./CS/PowerPointPresentation/SearchExtract/PresentationExtractText/Program.cs) | [Program.vb](./VB/PowerPointPresentation/SearchExtract/PresentationExtractText/Program.vb)
