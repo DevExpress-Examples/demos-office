@@ -10,6 +10,15 @@ This repository contains console applications that use the DevExpress Office Fil
 
 > Office, Excel, Word, PowerPoint are trademarks or registered trademarks of Microsoft Corporation.
 
+## Build and Run Console Demos for Office File API
+
+For information on how to create and run a .NET console application, refer to the following tutorial: [Create a .NET console application](https://learn.microsoft.com/en-us/dotnet/core/tutorials/create-console-app?pivots=visualstudio).
+
+To use Office File API products in a console application, ensure that you have the following prerequisites and corresponding NuGet packages installed:
+
+* [Office File API Prerequisites](https://docs.devexpress.com/OfficeFileAPI/405462/installation-guide/prerequisites)
+* [Install NuGet packages](https://docs.devexpress.com/OfficeFileAPI/400744/installation-guide/install-nuget-packages)
+
 ## Process PDF Documents
 
 [DevExpress PDF Document API for .NET](https://www.devexpress.com/products/net/office-file-api/pdf/) allows you to generate, edit, convert, merge, split, password-protect, and digitally sign PDF files.
