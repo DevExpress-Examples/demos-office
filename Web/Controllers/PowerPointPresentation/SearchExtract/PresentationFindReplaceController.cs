@@ -5,6 +5,7 @@ using DevExpress.Docs;
 using DevExpress.Docs.Presentation;
 #endregion Code
 using Microsoft.AspNetCore.Mvc;
+using DevExpress.Docs.Office;
 
 namespace BlazorDemo.OfficeFileApi.Controllers.PowerPointPresentation.SearchExtract {
     [ApiController]
@@ -34,7 +35,7 @@ namespace BlazorDemo.OfficeFileApi.Controllers.PowerPointPresentation.SearchExtr
                     presentation.RemoveText(searchResult);
                     break;
                 case FindReplaceActionType.Highlight:
-                    presentation.ModifyTextProperties(searchResult, new TextProperties() { HighlightColor = new OfficeColor(highlightColor) });
+                    presentation.ModifyTextProperties(searchResult, new DevExpress.Docs.Office.TextProperties() { HighlightColor = new OfficeColor(highlightColor) });
                     break;
             }
             var outputStream = new MemoryStream();

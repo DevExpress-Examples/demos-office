@@ -1,6 +1,7 @@
 using System.Drawing;
 using DevExpress.Docs;
 using DevExpress.Docs.Presentation;
+using DevExpress.Docs.Office;
 
 class Program {
     const string InputFilePath = @"Documents\Sample.pptx";
@@ -54,7 +55,7 @@ class Program {
                 presentation.RemoveText(searchResult);
                 break;
             case FindReplaceActionType.Highlight:
-                presentation.ModifyTextProperties(searchResult, new TextProperties { HighlightColor = new OfficeColor(highlightColor) });
+                presentation.ModifyTextProperties(searchResult, new DevExpress.Docs.Office.TextProperties { HighlightColor = new OfficeColor(highlightColor) });
                 break;
         }
 
